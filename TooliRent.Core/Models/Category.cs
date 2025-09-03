@@ -13,5 +13,8 @@ namespace TooliRent.Core.Models
 
         [MaxLength(255)]
         public string Description { get; set; } = string.Empty;
+
+        //Navigational Properties
+        public ICollection<Tool>? Tools { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace TooliRent.Core.Models
 
         public int CategoryId { get; set; }
 
-        [MaxLength(300)]
+        [MaxLength(255)]
         public string Description { get; set; } = string.Empty;
 
         public bool Available { get; set; } = true;
