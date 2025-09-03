@@ -9,5 +9,8 @@ namespace TooliRent.Core.Models
         public string LastName { get; set; } = string.Empty;
         public DateTime? BirthDate { get; set; }
         public bool IsActive { get; set; } = true;
+
+        //Navigational Properties
+        public ICollection<Booking>? Bookings { get; set; }
     }
 }

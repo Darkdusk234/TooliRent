@@ -21,5 +21,6 @@ namespace TooliRent.Core.Models
 
         //Navigational properties
         public Category? Category { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
     }
 }
