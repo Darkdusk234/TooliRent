@@ -13,6 +13,7 @@ namespace TooliRent.Core.Models
         [Required]
         public int ToolId { get; set; }
 
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool IsPickedUp { get; set; } = false;
         public DateTime? ReturnDate { get; set; }
 
