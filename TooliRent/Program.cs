@@ -1,4 +1,6 @@
 
+using TooliRent.IdentitySeed;
+
 namespace TooliRent
 {
     public class Program
@@ -29,6 +31,8 @@ namespace TooliRent
 
 
             app.MapControllers();
+
+            IdentityDataSeeder.SeedAsync(app.Services).Wait();
 
             app.Run();
         }
