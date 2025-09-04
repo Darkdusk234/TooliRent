@@ -1,10 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TooliRent", "TooliRent\TooliRent.csproj", "{AA974FDA-2289-4C49-AE55-23BED79EE1E0}"
 	ProjectSection(ProjectDependencies) = postProject
+		{13F7C4BE-62EF-4192-B9FB-E25B9A22662D} = {13F7C4BE-62EF-4192-B9FB-E25B9A22662D}
+		{BF5654E7-2363-46E5-A607-B4652EED8541} = {BF5654E7-2363-46E5-A607-B4652EED8541}
 		{CA06CFFE-DE76-4FE9-B4E8-8B06A9F5E49E} = {CA06CFFE-DE76-4FE9-B4E8-8B06A9F5E49E}
 	EndProjectSection
 EndProject
@@ -16,6 +18,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TooliRent.Infrastructure", 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TooliRent.Services", "TooliRent.Services\TooliRent.Services.csproj", "{BF5654E7-2363-46E5-A607-B4652EED8541}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA06CFFE-DE76-4FE9-B4E8-8B06A9F5E49E} = {CA06CFFE-DE76-4FE9-B4E8-8B06A9F5E49E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

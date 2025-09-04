@@ -6,7 +6,7 @@ namespace TooliRent.Infrastructure.Data
 {
     public class ToolIRentDbContext : IdentityDbContext<User>
     {
-        public ToolIRentDbContext(DbContextOptions<ToolIRentDbContext> option) : base(option)
+        public ToolIRentDbContext(DbContextOptions<ToolIRentDbContext> options) : base(options)
         {
         }
 
@@ -61,6 +61,9 @@ namespace TooliRent.Infrastructure.Data
                       .WithOne(b => b.User)
                       .HasForeignKey(b => b.UserId);
             });
+
+            // Seed initial data
+            SeedData(modelBuilder);
         }
 
         private void SeedData(ModelBuilder modelBuilder)
