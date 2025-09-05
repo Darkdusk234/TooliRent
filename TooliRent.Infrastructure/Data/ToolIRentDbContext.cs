@@ -101,7 +101,7 @@ namespace TooliRent.Infrastructure.Data
                     Id = 1,
                     UserId = "admin",
                     ToolId = 1,
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = new DateTime(2025, 09, 05),
                     IsPickedUp = false
                 },
                 new Booking
@@ -109,9 +109,9 @@ namespace TooliRent.Infrastructure.Data
                     Id = 2,
                     UserId = "admin",
                     ToolId = 2,
-                    CreatedDate = DateTime.UtcNow.AddDays(-5),
+                    CreatedDate = new DateTime(2025, 08, 30),
                     IsPickedUp = true,
-                    ReturnDate = DateTime.UtcNow.AddDays(-1)
+                    ReturnDate = new DateTime(2025, 09, 04),
                 }
                 );
 
