@@ -51,7 +51,7 @@ namespace TooliRent.Infrastructure.Data
                       .HasForeignKey(e => e.ToolId);
                 entity.HasOne(e => e.User)
                       .WithMany(u => u.Bookings)
-                      .HasForeignKey(e => e.UserId);
+                      .HasForeignKey(e => e.Id);
             });
 
             //Configure User entity
