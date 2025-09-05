@@ -8,7 +8,7 @@ namespace TooliRent.Core.Models
         public int Id { get; set; }
 
         [Required]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         [Required]
         public int ToolId { get; set; }

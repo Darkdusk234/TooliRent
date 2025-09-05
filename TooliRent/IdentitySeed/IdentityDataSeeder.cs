@@ -29,6 +29,7 @@ namespace TooliRent.IdentitySeed
             {
                 adminUser = new User
                 {
+                    Id = "admin",
                     UserName = "admin",
                     Email = adminEmail,
                     EmailConfirmed = true,

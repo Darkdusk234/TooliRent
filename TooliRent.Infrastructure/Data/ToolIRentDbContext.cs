@@ -74,35 +74,6 @@ namespace TooliRent.Infrastructure.Data
                 new Category { Id = 2, Name = "Hand Tools", Description = "Manual tools for various tasks" }
             );
 
-            // Seed Users
-            var user1Id = Guid.NewGuid();
-            var user2Id = Guid.NewGuid();
-
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = user1Id.ToString(),
-                    UserName = "user",
-                    NormalizedUserName = "USER",
-                    Email = "user@example.com",
-                    NormalizedEmail = "USER@EXAMPLE.COM",
-                    FirstName = "John",
-                    LastName = "Doe",
-                    IsActive = true
-                },
-                new User
-                {
-                    Id = user2Id.ToString(),
-                    UserName = "admin",
-                    NormalizedUserName = "ADMIN",
-                    Email = "admin@example.com",
-                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
-                    FirstName = "Admin",
-                    LastName = "Smith",
-                    IsActive = true
-                }
-            );
-
             // Seed Tools
             modelBuilder.Entity<Tool>().HasData(
                 new Tool
@@ -128,7 +99,7 @@ namespace TooliRent.Infrastructure.Data
                 new Booking
                 {
                     Id = 1,
-                    UserId = user1Id,
+                    UserId = "admin",
                     ToolId = 1,
                     CreatedDate = DateTime.UtcNow,
                     IsPickedUp = false
@@ -136,13 +107,14 @@ namespace TooliRent.Infrastructure.Data
                 new Booking
                 {
                     Id = 2,
-                    UserId = user2Id,
+                    UserId = "admin",
                     ToolId = 2,
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.UtcNow.AddDays(-5),
                     IsPickedUp = true,
                     ReturnDate = DateTime.UtcNow.AddDays(-1)
                 }
                 );
+
         }
     }
 }

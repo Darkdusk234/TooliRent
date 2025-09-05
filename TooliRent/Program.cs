@@ -20,10 +20,12 @@ namespace TooliRent
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<ToolIRentDbContext>(options =>
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             var app = builder.Build();
 
-            builder.Services.AddDbContext<ToolIRentDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+           
 
             // Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>
