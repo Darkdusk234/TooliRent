@@ -23,10 +23,6 @@ namespace TooliRent
             builder.Services.AddDbContext<ToolIRentDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            var app = builder.Build();
-
-           
-
             // Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
@@ -41,6 +37,8 @@ namespace TooliRent
               .AddEntityFrameworkStores<ToolIRentDbContext>()
               .AddSignInManager()
               .AddDefaultTokenProviders();
+
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
