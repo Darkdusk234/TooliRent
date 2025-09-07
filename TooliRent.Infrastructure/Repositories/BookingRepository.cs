@@ -26,9 +26,9 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.ToolId == toolId).ToListAsync();
         }
 
-        public Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId)
+        public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            return await _dbSet.Where(b => b.UserId == userId).ToListAsync();
         }
 
         public Task<IEnumerable<Booking>> GetBookingsWithinDateRangeAsync(DateTime startDate, DateTime endDate)
