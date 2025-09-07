@@ -5,7 +5,7 @@ using TooliRent.Infrastructure.Data;
 
 namespace TooliRent.Infrastructure.Repositories
 {
-    internal class ToolRepository : Repository<Tool>, IToolRepository
+    public class ToolRepository : Repository<Tool>, IToolRepository
     {
         public ToolRepository(ToolIRentDbContext context) : base(context)
         {
