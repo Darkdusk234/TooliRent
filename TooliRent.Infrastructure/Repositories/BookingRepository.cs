@@ -21,9 +21,9 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.IsPickedUp == isPickedUp).ToListAsync();
         }
 
-        public Task<IEnumerable<Booking>> GetBookingsByToolIdAsync(int toolId)
+        public async Task<IEnumerable<Booking>> GetBookingsByToolIdAsync(int toolId)
         {
-            throw new NotImplementedException();
+            return await _dbSet.Where(b => b.ToolId == toolId).ToListAsync();
         }
 
         public Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId)
