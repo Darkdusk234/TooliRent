@@ -16,9 +16,9 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.ReturnDate == DateTime.MinValue).ToListAsync();
         }
 
-        public Task<IEnumerable<Booking>> GetBookingsByPickupStatusAsync(bool isPickedUp)
+        public async Task<IEnumerable<Booking>> GetBookingsByPickupStatusAsync(bool isPickedUp)
         {
-            throw new NotImplementedException();
+            return await _dbSet.Where(b => b.IsPickedUp == isPickedUp).ToListAsync();
         }
 
         public Task<IEnumerable<Booking>> GetBookingsByToolIdAsync(int toolId)
