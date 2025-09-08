@@ -15,6 +15,7 @@ namespace TooliRent.Core.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool IsPickedUp { get; set; } = false;
+        public bool IsCancelled { get; set; } = false;
         public DateTime? ReturnDate { get; set; }
 
         //Navigational Properties

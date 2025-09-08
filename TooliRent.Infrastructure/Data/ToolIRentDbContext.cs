@@ -102,7 +102,8 @@ namespace TooliRent.Infrastructure.Data
                     UserId = "admin",
                     ToolId = 1,
                     CreatedDate = new DateTime(2025, 09, 05),
-                    IsPickedUp = false
+                    IsPickedUp = false,
+                    IsCancelled = false
                 },
                 new Booking
                 {
@@ -111,6 +112,7 @@ namespace TooliRent.Infrastructure.Data
                     ToolId = 2,
                     CreatedDate = new DateTime(2025, 08, 30),
                     IsPickedUp = true,
+                    IsCancelled = false,
                     ReturnDate = new DateTime(2025, 09, 04),
                 }
                 );

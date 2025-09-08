@@ -11,6 +11,7 @@
         public string? ToolDescription { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsPickedUp { get; set; }
+        public bool IsCancelled { get; set; }
         public DateTime? ReturnDate { get; set; }
 
     }
