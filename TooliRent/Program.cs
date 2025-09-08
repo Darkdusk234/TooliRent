@@ -1,4 +1,10 @@
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using TooliRent.Core.Models;
+using TooliRent.IdentitySeed;
+using TooliRent.Infrastructure.Data;
+
 namespace TooliRent
 {
     public class Program
@@ -13,6 +19,24 @@ namespace TooliRent
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<ToolIRentDbContext>(options =>
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Identity
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.User.RequireUniqueEmail = true;
+            })
+              .AddRoles<IdentityRole>()
+              .AddEntityFrameworkStores<ToolIRentDbContext>()
+              .AddSignInManager()
+              .AddDefaultTokenProviders();
 
             var app = builder.Build();
 
@@ -29,6 +53,8 @@ namespace TooliRent
 
 
             app.MapControllers();
+
+            IdentityDataSeeder.SeedAsync(app.Services).Wait();
 
             app.Run();
         }
