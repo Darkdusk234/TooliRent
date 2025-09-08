@@ -1,6 +1,6 @@
 ﻿namespace TooliRent.Services.DTOs
 {
-    internal interface ToolDto
+    public interface ToolDto
     {
         public int ToolId { get; set; }
         public string ToolType { get; set; }
