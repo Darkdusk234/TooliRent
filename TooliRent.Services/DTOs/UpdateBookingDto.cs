@@ -6,5 +6,6 @@
         public int ToolId { get; set; }
         public bool IsPickedUp { get; set; }
         public DateTime? ReturnDate { get; set; }
+        public DateTime? LastBookedDate { get; set; }
     }
 }

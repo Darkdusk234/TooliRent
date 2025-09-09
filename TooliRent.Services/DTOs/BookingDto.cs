@@ -13,6 +13,7 @@
         public bool IsPickedUp { get; set; }
         public bool IsCancelled { get; set; }
         public DateTime? ReturnDate { get; set; }
+        public DateTime LastBookedDate { get; set; }
 
     }
 }
