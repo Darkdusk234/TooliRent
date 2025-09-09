@@ -1,6 +1,6 @@
-﻿namespace TooliRent.Services.DTOs
+﻿namespace TooliRent.Services.DTOs.ToolDtos
 {
-    public class CreateToolDto
+    public class UpdateToolDto
     {
         public string ToolType { get; set; } = string.Empty;
         public string? Description { get; set; }

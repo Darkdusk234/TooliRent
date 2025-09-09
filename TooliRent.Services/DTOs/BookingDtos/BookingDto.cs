@@ -1,4 +1,4 @@
-﻿namespace TooliRent.Services.DTOs
+﻿namespace TooliRent.Services.DTOs.BookingDtos
 {
     public class BookingDto
     {

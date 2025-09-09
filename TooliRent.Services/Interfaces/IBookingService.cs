@@ -1,4 +1,4 @@
-﻿using TooliRent.Services.DTOs;
+﻿using TooliRent.Services.DTOs.BookingDtos;
 
 namespace TooliRent.Services.Interfaces
 {

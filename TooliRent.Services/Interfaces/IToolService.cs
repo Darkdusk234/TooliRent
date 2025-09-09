@@ -1,4 +1,4 @@
-﻿using TooliRent.Services.DTOs;
+﻿using TooliRent.Services.DTOs.ToolDtos;
 
 namespace TooliRent.Services.Interfaces
 {
