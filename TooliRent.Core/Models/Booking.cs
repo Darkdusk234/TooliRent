@@ -20,7 +20,7 @@ namespace TooliRent.Core.Models
         public DateTime LastBookedDate { get; set; } = DateTime.UtcNow;
 
         //Navigational Properties
-        public User? User { get; set; }
-        public Tool? Tool { get; set; }
+        public User User { get; set; } = null!;
+        public Tool Tool { get; set; } = null!;
     }
 }
