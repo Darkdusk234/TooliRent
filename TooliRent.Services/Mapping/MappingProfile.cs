@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TooliRent.Core.Models;
 using TooliRent.Services.DTOs.BookingDtos;
+using TooliRent.Services.DTOs.CategoryDtos;
 using TooliRent.Services.DTOs.ToolDtos;
 
 namespace TooliRent.Services.Mapping
@@ -39,6 +40,17 @@ namespace TooliRent.Services.Mapping
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Tool, opt => opt.Ignore())
                 .ForMember(dest => dest.User, opt => opt.Ignore());
+
+            // Category Mappings
+            CreateMap<Category, CategoryDto>();
+
+            CreateMap<CreateCategoryDto, Category>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Tools, opt => opt.Ignore());
+
+            CreateMap<UpdateCategoryDto, Category>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Tools, opt => opt.Ignore());
         }
     }
 }
