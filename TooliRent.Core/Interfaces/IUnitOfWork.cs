@@ -7,6 +7,6 @@ namespace TooliRent.Core.Interfaces
         IToolRepository Tools { get; }
         IBookingRepository Bookings { get; }
         IRepository<Category> Categories { get; }
-        void SaveChangesAsync();
+        Task<int> SaveChangesAsync();
     }
 }
