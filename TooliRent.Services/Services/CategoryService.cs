@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TooliRent.Core.Interfaces;
+using TooliRent.Core.Models;
 using TooliRent.Services.DTOs.CategoryDtos;
 using TooliRent.Services.Interfaces;
 
@@ -28,9 +29,15 @@ namespace TooliRent.Services.Services
             return category != null ? _mapper.Map<CategoryDto>(category) : null;
         }
 
-        public async Task<CreateCategoryDto> CreateCategoryAsync(CreateCategoryDto category)
+        public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto category)
         {
-            
+            var newCategory = _mapper.Map<Category>(category);
+
+            await _unitOfWork.Categories.AddAsync(newCategory);
+            await _unitOfWork.SaveChangesAsync();
+
+            var createdCategory = await _unitOfWork.Categories.GetByIdAsync(newCategory.Id);
+            return _mapper.Map<CategoryDto>(createdCategory);
         }
 
         public Task<bool> DeleteCategoryAsync(int id)
@@ -38,7 +45,7 @@ namespace TooliRent.Services.Services
             throw new NotImplementedException();
         }
 
-        public Task<UpdateCategoryDto> UpdateCategoryAsync(UpdateCategoryDto category)
+        public Task<bool> UpdateCategoryAsync(UpdateCategoryDto category)
         {
             throw new NotImplementedException();
         }
