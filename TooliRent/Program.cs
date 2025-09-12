@@ -1,4 +1,5 @@
 
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -8,6 +9,9 @@ using TooliRent.Core.Models;
 using TooliRent.IdentitySeed;
 using TooliRent.Infrastructure.Data;
 using TooliRent.Infrastructure.Repositories;
+using TooliRent.Services.Validators;
+using TooliRent.Services.Validators.BookingValidators;
+using TooliRent.Services.Mapping;
 
 namespace TooliRent
 {
@@ -67,6 +71,23 @@ namespace TooliRent
 
             // Repository patterns
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Fluent Validation
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingDtoValidator>();
+
+            // AutoMapper
+            builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
+
+            // CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
 
             // Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>

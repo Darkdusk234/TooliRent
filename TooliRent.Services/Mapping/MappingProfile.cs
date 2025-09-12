@@ -6,7 +6,7 @@ using TooliRent.Services.DTOs.ToolDtos;
 
 namespace TooliRent.Services.Mapping
 {
-    internal class MappingProfile : Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
