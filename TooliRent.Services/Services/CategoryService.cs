@@ -40,9 +40,16 @@ namespace TooliRent.Services.Services
             return _mapper.Map<CategoryDto>(createdCategory);
         }
 
-        public Task<bool> DeleteCategoryAsync(int id)
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            if(!await CategoryExistsAsync(id))
+            {
+                return false;
+            }
+
+            await _unitOfWork.Categories.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public Task<bool> UpdateCategoryAsync(UpdateCategoryDto category)
