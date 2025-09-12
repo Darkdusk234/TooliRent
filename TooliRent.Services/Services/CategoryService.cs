@@ -50,9 +50,9 @@ namespace TooliRent.Services.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> CategoryExistsAsync(int id)
+        public async Task<bool> CategoryExistsAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Categories.ExistsAsync(id);
         }
     }
 }
