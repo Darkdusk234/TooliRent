@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using TooliRent.Core.Interfaces;
 using TooliRent.Core.Models;
 using TooliRent.IdentitySeed;
 using TooliRent.Infrastructure.Data;
+using TooliRent.Infrastructure.Repositories;
 
 namespace TooliRent
 {
@@ -62,6 +64,9 @@ namespace TooliRent
 
             builder.Services.AddDbContext<ToolIRentDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Repository patterns
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>
