@@ -1,23 +1,36 @@
-﻿using TooliRent.Services.DTOs.CategoryDtos;
+﻿using AutoMapper;
+using TooliRent.Core.Interfaces;
+using TooliRent.Services.DTOs.CategoryDtos;
 using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
 {
     internal class CategoryService : ICategoryService
     {
-        public Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public Task<CategoryDto?> GetByCategoryIdAsync(int id)
+        public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
         {
-            throw new NotImplementedException();
+            var categories = await _unitOfWork.Categories.GetAllAsync();
+            return _mapper.Map<IEnumerable<CategoryDto>>(categories);
         }
 
-        public Task<CreateCategoryDto> CreateCategoryAsync(CreateCategoryDto category)
+        public async Task<CategoryDto?> GetByCategoryIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
+            return category != null ? _mapper.Map<CategoryDto>(category) : null;
+        }
+
+        public async Task<CreateCategoryDto> CreateCategoryAsync(CreateCategoryDto category)
+        {
+            
         }
 
         public Task<bool> DeleteCategoryAsync(int id)
