@@ -52,7 +52,7 @@ namespace TooliRent.Services.Services
             return true;
         }
 
-        public Task<bool> UpdateCategoryAsync(UpdateCategoryDto category)
+        public Task<bool> UpdateCategoryAsync(int id, UpdateCategoryDto category)
         {
             throw new NotImplementedException();
         }
