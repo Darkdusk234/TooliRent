@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using TooliRent.Core.Models;
 using TooliRent.IdentitySeed;
 using TooliRent.Infrastructure.Data;
@@ -46,47 +47,56 @@ namespace TooliRent
 
                 c.AddSecurityDefinition("Bearer", jwtSecurityScheme);
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { jwtSecurityScheme, Array.Empty<string>() }
-    });
+                {
+                    { jwtSecurityScheme, Array.Empty<string>() }
+                });
 
-                builder.Services.AddDbContext<ToolIRentDbContext>(options =>
+                // Include XML comments for better Swagger documentation
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                if (File.Exists(xmlPath))
+                {
+                    c.IncludeXmlComments(xmlPath);
+                }
+            });
+
+            builder.Services.AddDbContext<ToolIRentDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-                // Identity
-                builder.Services.AddIdentity<User, IdentityRole>(options =>
-                {
-                    options.Password.RequireDigit = true;
-                    options.Password.RequiredLength = 6;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = true;
-                    options.Password.RequireLowercase = true;
-                    options.User.RequireUniqueEmail = true;
-                })
-                  .AddRoles<IdentityRole>()
-                  .AddEntityFrameworkStores<ToolIRentDbContext>()
-                  .AddSignInManager()
-                  .AddDefaultTokenProviders();
+            // Identity
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.User.RequireUniqueEmail = true;
+            })
+              .AddRoles<IdentityRole>()
+              .AddEntityFrameworkStores<ToolIRentDbContext>()
+              .AddSignInManager()
+              .AddDefaultTokenProviders();
 
-                var app = builder.Build();
+            var app = builder.Build();
 
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
-                }
-
-                app.UseHttpsRedirection();
-
-                app.UseAuthorization();
-
-
-                app.MapControllers();
-
-                IdentityDataSeeder.SeedAsync(app.Services).Wait();
-
-                app.Run();
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            IdentityDataSeeder.SeedAsync(app.Services).Wait();
+
+            app.Run();
+        }
     }
-    }
+}
