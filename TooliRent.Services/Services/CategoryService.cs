@@ -52,9 +52,19 @@ namespace TooliRent.Services.Services
             return true;
         }
 
-        public Task<bool> UpdateCategoryAsync(int id, UpdateCategoryDto category)
+        public async Task<bool> UpdateCategoryAsync(int id, UpdateCategoryDto category)
         {
-            throw new NotImplementedException();
+            var existingCategory = await _unitOfWork.Categories.GetByIdAsync(id);
+            if (existingCategory == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(category, existingCategory);
+
+            await _unitOfWork.Categories.UpdateAsync(existingCategory);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> CategoryExistsAsync(int id)
