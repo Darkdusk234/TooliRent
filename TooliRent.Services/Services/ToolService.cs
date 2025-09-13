@@ -62,9 +62,19 @@ namespace TooliRent.Services.Services
             return true;
         }
 
-        public Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
+        public async Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
         {
-            throw new NotImplementedException();
+            var existingTool = await _unitOfWork.Tools.GetByIdAsync(toolId);
+            if(existingTool == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(updateToolDto, existingTool);
+
+            await _unitOfWork.Tools.UpdateAsync(existingTool);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public Task<bool> IsToolAvailableAsync(int toolId)
