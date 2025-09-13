@@ -5,16 +5,6 @@ namespace TooliRent.Services.Services
 {
     internal class ToolService : IToolService
     {
-        public Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteToolAsync(int toolId)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IEnumerable<ToolDto>> GetAllToolsAsync()
         {
             throw new NotImplementedException();
@@ -31,6 +21,16 @@ namespace TooliRent.Services.Services
         }
 
         public Task<IEnumerable<ToolDto>> GetToolsByCategoryAsync(int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteToolAsync(int toolId)
         {
             throw new NotImplementedException();
         }
