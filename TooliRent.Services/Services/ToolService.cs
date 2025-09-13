@@ -50,9 +50,16 @@ namespace TooliRent.Services.Services
             return _mapper.Map<ToolDto>(createdTool);
         }
 
-        public Task<bool> DeleteToolAsync(int toolId)
+        public async Task<bool> DeleteToolAsync(int toolId)
         {
-            throw new NotImplementedException();
+            if(!await ToolExistsAsync(toolId))
+            {
+                return false;
+            }
+
+            await _unitOfWork.Tools.DeleteAsync(toolId);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
