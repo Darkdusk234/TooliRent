@@ -39,9 +39,15 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
-        public Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
+        public async Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
         {
-            throw new NotImplementedException();
+            var newTool = _mapper.Map<Core.Models.Tool>(createToolDto);
+
+            await _unitOfWork.Tools.AddAsync(newTool);
+            await _unitOfWork.SaveChangesAsync();
+
+            var createdTool = await _unitOfWork.Tools.GetByIdAsync(newTool.Id);
+            return _mapper.Map<ToolDto>(createdTool);
         }
 
         public Task<bool> DeleteToolAsync(int toolId)
