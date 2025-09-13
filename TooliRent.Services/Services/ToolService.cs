@@ -15,9 +15,10 @@ namespace TooliRent.Services.Services
             _mapper = mapper;
         }
 
-        public Task<IEnumerable<ToolDto>> GetAllToolsAsync()
+        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync()
         {
-            throw new NotImplementedException();
+            var tools = await _unitOfWork.Tools.GetAllAsync();
+            return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
         public Task<ToolDto?> GetToolByIdAsync(int toolId)
@@ -45,17 +46,17 @@ namespace TooliRent.Services.Services
             throw new NotImplementedException();
         }
 
+        public Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> IsToolAvailableAsync(int toolId)
         {
             throw new NotImplementedException();
         }
 
         public Task<bool> ToolExistsAsync(int toolId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
         {
             throw new NotImplementedException();
         }
