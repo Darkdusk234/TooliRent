@@ -1,10 +1,20 @@
-﻿using TooliRent.Services.DTOs.ToolDtos;
+﻿using AutoMapper;
+using TooliRent.Core.Interfaces;
+using TooliRent.Services.DTOs.ToolDtos;
 using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
 {
     internal class ToolService : IToolService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public ToolService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+
         public Task<IEnumerable<ToolDto>> GetAllToolsAsync()
         {
             throw new NotImplementedException();
