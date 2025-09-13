@@ -77,9 +77,14 @@ namespace TooliRent.Services.Services
             return true;
         }
 
-        public Task<bool> IsToolAvailableAsync(int toolId)
+        public async Task<bool> IsToolAvailableAsync(int toolId)
         {
-            throw new NotImplementedException();
+            if(!await ToolExistsAsync(toolId))
+            {
+                return false;
+            }
+
+            return await _unitOfWork.Tools.IsToolAvailableAsync(toolId);
         }
 
         public async Task<bool> ToolExistsAsync(int toolId)
