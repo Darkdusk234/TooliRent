@@ -33,9 +33,10 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
-        public Task<IEnumerable<ToolDto>> GetToolsByCategoryAsync(int categoryId)
+        public async Task<IEnumerable<ToolDto>> GetToolsByCategoryAsync(int categoryId)
         {
-            throw new NotImplementedException();
+            var tools = await _unitOfWork.Tools.GetToolsByCategoryAsync(categoryId);
+            return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
         public Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
