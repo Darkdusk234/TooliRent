@@ -65,9 +65,9 @@ namespace TooliRent.Services.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> ToolExistsAsync(int toolId)
+        public async Task<bool> ToolExistsAsync(int toolId)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Tools.ExistsAsync(toolId);
         }
     }
 }
