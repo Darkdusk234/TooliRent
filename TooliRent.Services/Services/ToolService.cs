@@ -21,9 +21,10 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
-        public Task<ToolDto?> GetToolByIdAsync(int toolId)
+        public async Task<ToolDto?> GetToolByIdAsync(int toolId)
         {
-            throw new NotImplementedException();
+            var tool = await _unitOfWork.Tools.GetByIdAsync(toolId);
+            return tool != null ? _mapper.Map<ToolDto>(tool) : null;
         }
 
         public Task<IEnumerable<ToolDto>> GetToolsByAvailabilityAsync(bool available)
