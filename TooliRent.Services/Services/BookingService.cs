@@ -1,10 +1,20 @@
-﻿using TooliRent.Services.DTOs.BookingDtos;
+﻿using AutoMapper;
+using TooliRent.Core.Interfaces;
+using TooliRent.Services.DTOs.BookingDtos;
 using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
 {
     internal class BookingService : IBookingService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+
         public Task<IEnumerable<BookingDto>> GetActiveBookingsAsync()
         {
             throw new NotImplementedException();
