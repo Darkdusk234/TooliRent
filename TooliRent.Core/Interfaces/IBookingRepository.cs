@@ -9,5 +9,6 @@ namespace TooliRent.Core.Interfaces
         public Task<IEnumerable<Booking>> GetActiveBookingsAsync();
         public Task<IEnumerable<Booking>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate);
         public Task<IEnumerable<Booking>> GetBookingsByPickupStatusAsync(bool isPickedUp);
+        public Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned);
     }
 }
