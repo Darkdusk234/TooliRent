@@ -33,9 +33,10 @@ namespace TooliRent.Services.Services
             return booking != null ? _mapper.Map<BookingDto>(booking) : null;
         }
 
-        public Task<IEnumerable<BookingDto>> GetBookingsByPickupStatusAsync(bool isPickedUp)
+        public async Task<IEnumerable<BookingDto>> GetBookingsByPickupStatusAsync(bool isPickedUp)
         {
-            throw new NotImplementedException();
+           var bookings = await _unitOfWork.Bookings.GetBookingsByPickupStatusAsync(isPickedUp);
+           return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
         public Task<IEnumerable<BookingDto>> GetBookingsByReturnStatusAsync(bool isReturned)
