@@ -33,11 +33,6 @@ namespace TooliRent.Services.Services
             return booking != null ? _mapper.Map<BookingDto>(booking) : null;
         }
 
-        public Task<IEnumerable<BookingDto>> GetBookingsByCancellationStatusAsync(bool isCancelled)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IEnumerable<BookingDto>> GetBookingsByPickupStatusAsync(bool isPickedUp)
         {
             throw new NotImplementedException();

@@ -11,7 +11,6 @@ namespace TooliRent.Services.Interfaces
         Task<IEnumerable<BookingDto>> GetActiveBookingsAsync();
         Task<IEnumerable<BookingDto>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<BookingDto>> GetBookingsByPickupStatusAsync(bool isPickedUp);
-        Task<IEnumerable<BookingDto>> GetBookingsByCancellationStatusAsync(bool isCancelled);
         Task<IEnumerable<BookingDto>> GetBookingsByReturnStatusAsync(bool isReturned);
         Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto);
         Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto);
