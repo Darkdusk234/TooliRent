@@ -27,9 +27,10 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
-        public Task<BookingDto?> GetBookingByIdAsync(int bookingId)
+        public async Task<BookingDto?> GetBookingByIdAsync(int bookingId)
         {
-            throw new NotImplementedException();
+            var booking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
+            return booking != null ? _mapper.Map<BookingDto>(booking) : null;
         }
 
         public Task<IEnumerable<BookingDto>> GetBookingsByCancellationStatusAsync(bool isCancelled)
