@@ -21,9 +21,10 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
-        public Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
+        public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
         {
-            throw new NotImplementedException();
+            var bookings = await _unitOfWork.Bookings.GetAllAsync();
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
         public Task<BookingDto?> GetBookingByIdAsync(int bookingId)
