@@ -1,0 +1,78 @@
+﻿using TooliRent.Services.DTOs.BookingDtos;
+using TooliRent.Services.Interfaces;
+
+namespace TooliRent.Services.Services
+{
+    internal class BookingService : IBookingService
+    {
+        public Task<IEnumerable<BookingDto>> GetActiveBookingsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BookingDto?> GetBookingByIdAsync(int bookingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsByCancellationStatusAsync(bool isCancelled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsByPickupStatusAsync(bool isPickedUp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsByReturnStatusAsync(bool isReturned)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsByToolIdAsync(int toolId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsByUserIdAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CancelBookingAsync(int bookingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteBookingAsync(int bookingId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> BookingExistsAsync(int bookingId)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
