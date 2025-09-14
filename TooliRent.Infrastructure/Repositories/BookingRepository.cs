@@ -21,6 +21,18 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.IsPickedUp == isPickedUp).ToListAsync();
         }
 
+        public Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned)
+        {
+            if(isReturned)
+            {
+                return Task.FromResult(_dbSet.Where(b => b.ReturnDate == DateTime.MinValue).AsEnumerable());
+            }
+            else
+            {
+                return Task.FromResult(_dbSet.Where(b => b.ReturnDate != DateTime.MinValue).AsEnumerable());
+            }
+        }
+
         public async Task<IEnumerable<Booking>> GetBookingsByToolIdAsync(int toolId)
         {
             return await _dbSet.Where(b => b.ToolId == toolId).ToListAsync();
