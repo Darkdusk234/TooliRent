@@ -68,6 +68,9 @@ namespace TooliRent.Infrastructure.Data
 
         private void SeedData(ModelBuilder modelBuilder)
         {
+            // Static DateTime to avoid dynamic changes
+            DateTime staticDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Utc);
+
             // Seed Categories
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Power Tools", Description = "Electric and battery-powered tools" },
@@ -102,7 +105,9 @@ namespace TooliRent.Infrastructure.Data
                     UserId = "admin",
                     ToolId = 1,
                     CreatedDate = new DateTime(2025, 09, 05),
-                    IsPickedUp = false
+                    IsPickedUp = false,
+                    IsCancelled = false,
+                    LastBookedDate = staticDate
                 },
                 new Booking
                 {
@@ -111,7 +116,9 @@ namespace TooliRent.Infrastructure.Data
                     ToolId = 2,
                     CreatedDate = new DateTime(2025, 08, 30),
                     IsPickedUp = true,
+                    IsCancelled = false,
                     ReturnDate = new DateTime(2025, 09, 04),
+                    LastBookedDate = staticDate
                 }
                 );
 

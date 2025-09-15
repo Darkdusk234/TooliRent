@@ -15,10 +15,12 @@ namespace TooliRent.Core.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool IsPickedUp { get; set; } = false;
+        public bool IsCancelled { get; set; } = false;
         public DateTime? ReturnDate { get; set; }
+        public DateTime LastBookedDate { get; set; } = DateTime.UtcNow;
 
         //Navigational Properties
-        public User? User { get; set; }
-        public Tool? Tool { get; set; }
+        public User User { get; set; } = null!;
+        public Tool Tool { get; set; } = null!;
     }
 }
