@@ -45,9 +45,10 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
-        public Task<IEnumerable<BookingDto>> GetBookingsByToolIdAsync(int toolId)
+        public async Task<IEnumerable<BookingDto>> GetBookingsByToolIdAsync(int toolId)
         {
-            throw new NotImplementedException();
+            var bookings = await _unitOfWork.Bookings.GetBookingsByToolIdAsync(toolId);
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
         public Task<IEnumerable<BookingDto>> GetBookingsByUserIdAsync(string userId)
