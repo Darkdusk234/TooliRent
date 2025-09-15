@@ -63,9 +63,24 @@ namespace TooliRent.Services.Services
            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
-        public Task<bool> CancelBookingAsync(int bookingId)
+        public async Task<bool> CancelBookingAsync(int bookingId)
         {
-            throw new NotImplementedException();
+            if(!await BookingExistsAsync(bookingId))
+            {
+                return false;
+            }
+
+            var bookingToCancel = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
+
+            if(bookingToCancel.IsCancelled)
+            {
+                return false;
+            }
+
+            bookingToCancel.IsCancelled = true;
+            await _unitOfWork.Bookings.UpdateAsync(bookingToCancel);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
