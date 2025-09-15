@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TooliRent.Core.Interfaces;
+using TooliRent.Core.Models;
 using TooliRent.Services.DTOs.BookingDtos;
 using TooliRent.Services.Interfaces;
 
@@ -83,9 +84,15 @@ namespace TooliRent.Services.Services
             return true;
         }
 
-        public Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
+        public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
         {
-            throw new NotImplementedException();
+            var newBooking = _mapper.Map<Booking>(createBookingDto);
+
+            await _unitOfWork.Bookings.AddAsync(newBooking);
+            await _unitOfWork.SaveChangesAsync();
+
+            var createdBooking = await _unitOfWork.Bookings.GetByIdAsync(newBooking.Id);
+            return _mapper.Map<BookingDto>(createdBooking);
         }
 
         public Task<bool> DeleteBookingAsync(int bookingId)
