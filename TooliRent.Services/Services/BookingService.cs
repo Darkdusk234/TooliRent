@@ -83,9 +83,9 @@ namespace TooliRent.Services.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> BookingExistsAsync(int bookingId)
+        public async Task<bool> BookingExistsAsync(int bookingId)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.Bookings.ExistsAsync(bookingId);
         }
     }
 }
