@@ -95,9 +95,16 @@ namespace TooliRent.Services.Services
             return _mapper.Map<BookingDto>(createdBooking);
         }
 
-        public Task<bool> DeleteBookingAsync(int bookingId)
+        public async Task<bool> DeleteBookingAsync(int bookingId)
         {
-            throw new NotImplementedException();
+            if (!await BookingExistsAsync(bookingId))
+            {
+                return false;
+            }
+
+            await _unitOfWork.Bookings.DeleteAsync(bookingId);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
