@@ -23,9 +23,9 @@ namespace TooliRent.Infrastructure.Repositories
 
         public IRepository<Category> Categories => _categories ??= new Repository<Category>(_context);
 
-        public async void SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
     }
 }

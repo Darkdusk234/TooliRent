@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TooliRent.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TooliRent.Infrastructure.Data;
 namespace TooliRent.Infrastructure.Migrations
 {
     [DbContext(typeof(ToolIRentDbContext))]
-    partial class ToolIRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250908125629_UpdatingBookingTable")]
+    partial class UpdatingBookingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,9 +175,6 @@ namespace TooliRent.Infrastructure.Migrations
                     b.Property<bool>("IsPickedUp")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastBookedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
@@ -200,7 +200,6 @@ namespace TooliRent.Infrastructure.Migrations
                             CreatedDate = new DateTime(2025, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsCancelled = false,
                             IsPickedUp = false,
-                            LastBookedDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             ToolId = 1,
                             UserId = "admin"
                         },
@@ -210,7 +209,6 @@ namespace TooliRent.Infrastructure.Migrations
                             CreatedDate = new DateTime(2025, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsCancelled = false,
                             IsPickedUp = true,
-                            LastBookedDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             ReturnDate = new DateTime(2025, 9, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ToolId = 2,
                             UserId = "admin"

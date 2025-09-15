@@ -20,5 +20,11 @@ namespace TooliRent.Infrastructure.Repositories
         {
             return await _dbSet.Where(t => t.CategoryId == categoryId).ToListAsync();
         }
+
+        public async Task<bool> IsToolAvailableAsync(int toolId)
+        {
+            var existingTool = await GetByIdAsync(toolId);
+            return existingTool.Available == true ? true : false;
+        }
     }
 }
