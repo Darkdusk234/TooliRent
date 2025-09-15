@@ -39,9 +39,10 @@ namespace TooliRent.Services.Services
            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
-        public Task<IEnumerable<BookingDto>> GetBookingsByReturnStatusAsync(bool isReturned)
+        public async Task<IEnumerable<BookingDto>> GetBookingsByReturnStatusAsync(bool isReturned)
         {
-            throw new NotImplementedException();
+            var bookings = await _unitOfWork.Bookings.GetBookingsByReturnStatusAsync(isReturned);
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
         public Task<IEnumerable<BookingDto>> GetBookingsByToolIdAsync(int toolId)
