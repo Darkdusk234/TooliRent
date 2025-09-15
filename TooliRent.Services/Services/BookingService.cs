@@ -51,9 +51,10 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
-        public Task<IEnumerable<BookingDto>> GetBookingsByUserIdAsync(string userId)
+        public async Task<IEnumerable<BookingDto>> GetBookingsByUserIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            var bookings = await _unitOfWork.Bookings.GetBookingsByUserIdAsync(userId);
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
         }
 
         public Task<IEnumerable<BookingDto>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate)
