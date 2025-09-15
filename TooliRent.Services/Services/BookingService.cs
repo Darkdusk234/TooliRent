@@ -107,9 +107,19 @@ namespace TooliRent.Services.Services
             return true;
         }
 
-        public Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
+        public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
         {
-            throw new NotImplementedException();
+            var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
+            if (existingBooking == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(updateBookingDto, existingBooking);
+
+            await _unitOfWork.Bookings.UpdateAsync(existingBooking);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> BookingExistsAsync(int bookingId)
