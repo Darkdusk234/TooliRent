@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TooliRent.Core.Models;
+using TooliRent.Services.DTOs.AuthDtos;
 
 namespace TooliRent.Controllers
 {
@@ -19,6 +21,33 @@ namespace TooliRent.Controllers
         {
             _users = users;
             _config = config;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new User
+            {
+                UserName = registerDto.UserName,
+                Email = registerDto.Email,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                BirthDate = registerDto.BirthDate
+            };
+
+            var result = await _users.CreateAsync(user, registerDto.Password);
+
+            if(!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok();
         }
 
         private async Task<string> GenerateJwtTokenAsync(IdentityUser user)
