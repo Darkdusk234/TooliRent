@@ -14,6 +14,9 @@ using TooliRent.Services.Validators.BookingValidators;
 using TooliRent.Services.Mapping;
 using TooliRent.Services.Interfaces;
 using TooliRent.Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TooliRent
 {
@@ -108,6 +111,34 @@ namespace TooliRent
               .AddEntityFrameworkStores<ToolIRentDbContext>()
               .AddSignInManager()
               .AddDefaultTokenProviders();
+
+            var jwt = builder.Configuration.GetSection("Jwt");
+            var key = Encoding.UTF8.GetBytes(jwt["Key"]);
+
+            builder.Services
+              .AddAuthentication(options =>
+              {
+                  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+              })
+              .AddJwtBearer(options =>
+              {
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuer = true,
+                      ValidateAudience = true,
+                      ValidateLifetime = true,
+                      ValidateIssuerSigningKey = true,
+                      ValidIssuer = jwt["Issuer"],
+                      ValidAudience = jwt["Audience"],
+                      IssuerSigningKey = new SymmetricSecurityKey(key)
+                  };
+              });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+            });
 
             var app = builder.Build();
 
