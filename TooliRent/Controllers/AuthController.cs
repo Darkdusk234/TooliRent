@@ -14,10 +14,10 @@ namespace TooliRent.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _users;    // or your IUserService
+        private readonly UserManager<User> _users;    // or your IUserService
         private readonly IConfiguration _config;
 
-        public AuthController(UserManager<IdentityUser> users, IConfiguration config)
+        public AuthController(UserManager<User> users, IConfiguration config)
         {
             _users = users;
             _config = config;
@@ -64,7 +64,7 @@ namespace TooliRent.Controllers
             return Ok(new { token });
         }
 
-        private async Task<string> GenerateJwtTokenAsync(IdentityUser user)
+        private async Task<string> GenerateJwtTokenAsync(User user)
         {
             var jwt = _config.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
