@@ -78,5 +78,13 @@ namespace TooliRent.Controllers
             var bookings = await _bookingService.GetBookingsByUserIdAsync(userId);
             return Ok(bookings);
         }
+
+        [HttpGet("daterange")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetBookingsWithLastDateWithinDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var bookings = await _bookingService.GetBookingsWithLastDateWithinDateRangeAsync(startDate, endDate);
+            return Ok(bookings);
+        }
     }
 }
