@@ -17,6 +17,7 @@ using TooliRent.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FluentValidation.AspNetCore;
 
 namespace TooliRent
 {
@@ -82,6 +83,7 @@ namespace TooliRent
 
             // Fluent Validation
             builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingDtoValidator>();
+            builder.Services.AddFluentValidationAutoValidation();
 
             // AutoMapper
             builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
