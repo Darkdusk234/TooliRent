@@ -46,5 +46,13 @@ namespace TooliRent.Controllers
             var bookings = await _bookingService.GetActiveBookingsAsync();
             return Ok(bookings);
         }
+
+        [HttpGet("{isPickedUp}")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetBookingsByPickupStatus(bool isPickedUp)
+        {
+            var bookings = await _bookingService.GetBookingsByPickupStatusAsync(isPickedUp);
+            return Ok(bookings);
+        }
     }
 }
