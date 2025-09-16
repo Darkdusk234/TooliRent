@@ -27,7 +27,7 @@ namespace TooliRent.Services.Validators.AuthValidators
 
             RuleFor(r => r.BirthDate)
                 .LessThan(DateTime.UtcNow).WithMessage("Birth date must be in the past.")
-                .GreaterThan(DateTime.UtcNow.AddYears(-15)).WithMessage("You must be older than 15 to register")
+                .LessThan(DateTime.UtcNow.AddYears(-15)).WithMessage("You must be older than 15 to register")
                 .GreaterThan(DateTime.UtcNow.AddYears(-120)).WithMessage("Birth date is not valid.");
         }
     }
