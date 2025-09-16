@@ -38,5 +38,13 @@ namespace TooliRent.Controllers
             }
             return Ok(booking);
         }
+
+        [HttpGet("active")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetActiveBookings()
+        {
+            var bookings = await _bookingService.GetActiveBookingsAsync();
+            return Ok(bookings);
+        }
     }
 }
