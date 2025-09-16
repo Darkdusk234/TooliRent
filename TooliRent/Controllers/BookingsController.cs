@@ -25,5 +25,18 @@ namespace TooliRent.Controllers
             var bookings = await _bookingService.GetAllBookingsAsync();
             return Ok(bookings);
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(BookingDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetBookingById(int id)
+        {
+            var booking = await _bookingService.GetBookingByIdAsync(id);
+            if (booking == null)
+            {
+                return NotFound("Booking not Found");
+            }
+            return Ok(booking);
+        }
     }
 }
