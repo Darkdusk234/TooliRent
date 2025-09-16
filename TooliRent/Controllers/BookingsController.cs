@@ -129,5 +129,26 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBookingDto updateBookingDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updated = await _bookingService.UpdateBookingAsync(id, updateBookingDto);
+
+            if (!updated)
+            {
+                return NotFound("Booking not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
