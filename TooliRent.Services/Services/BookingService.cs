@@ -73,7 +73,7 @@ namespace TooliRent.Services.Services
 
             var bookingToCancel = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
 
-            if(bookingToCancel.IsCancelled)
+            if(bookingToCancel.IsCancelled || bookingToCancel.ReturnDate != null)
             {
                 return false;
             }
