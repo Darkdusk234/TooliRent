@@ -115,5 +115,19 @@ namespace TooliRent.Controllers
             var createdBooking = await _bookingService.CreateBookingAsync(createBookingDto);
             return CreatedAtAction(nameof(GetBookingById), new { id = createdBooking.Id }, createdBooking);
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteBooking(int id)
+        {
+            var deleted = await _bookingService.DeleteBookingAsync(id);
+            if (!deleted)
+            {
+                return NotFound("Booking not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
