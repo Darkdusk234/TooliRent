@@ -62,5 +62,13 @@ namespace TooliRent.Controllers
             var bookings = await _bookingService.GetBookingsByPickupStatusAsync(isReturned);
             return Ok(bookings);
         }
+
+        [HttpGet("tool/{toolId}")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetBookingsByToolId(int toolId)
+        {
+            var bookings = await _bookingService.GetBookingsByToolIdAsync(toolId);
+            return Ok(bookings);
+        }
     }
 }
