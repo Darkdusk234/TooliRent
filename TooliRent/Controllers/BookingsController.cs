@@ -70,5 +70,13 @@ namespace TooliRent.Controllers
             var bookings = await _bookingService.GetBookingsByToolIdAsync(toolId);
             return Ok(bookings);
         }
+
+        [HttpGet("user/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetBookingsByUserId(string userId)
+        {
+            var bookings = await _bookingService.GetBookingsByUserIdAsync(userId);
+            return Ok(bookings);
+        }
     }
 }
