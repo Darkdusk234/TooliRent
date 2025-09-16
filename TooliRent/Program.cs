@@ -12,6 +12,8 @@ using TooliRent.Infrastructure.Repositories;
 using TooliRent.Services.Validators;
 using TooliRent.Services.Validators.BookingValidators;
 using TooliRent.Services.Mapping;
+using TooliRent.Services.Interfaces;
+using TooliRent.Services.Services;
 
 namespace TooliRent
 {
@@ -71,6 +73,9 @@ namespace TooliRent
 
             // Repository patterns
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Service patterns
+            builder.Services.AddScoped<IBookingService, BookingService>();
 
             // Fluent Validation
             builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingDtoValidator>();
