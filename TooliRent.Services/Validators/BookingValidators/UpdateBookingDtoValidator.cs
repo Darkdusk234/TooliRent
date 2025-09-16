@@ -3,7 +3,7 @@ using TooliRent.Services.DTOs.BookingDtos;
 
 namespace TooliRent.Services.Validators.BookingValidators
 {
-    internal class UpdateBookingDtoValidator : AbstractValidator<UpdateBookingDto>
+    public class UpdateBookingDtoValidator : AbstractValidator<UpdateBookingDto>
     {
         public UpdateBookingDtoValidator()
         {
