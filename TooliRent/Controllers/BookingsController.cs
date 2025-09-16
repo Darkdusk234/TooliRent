@@ -101,5 +101,19 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(BookingDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDto createBookingDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdBooking = await _bookingService.CreateBookingAsync(createBookingDto);
+            return CreatedAtAction(nameof(GetBookingById), new { id = createdBooking.Id }, createdBooking);
+        }
     }
 }
