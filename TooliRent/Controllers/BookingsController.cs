@@ -86,5 +86,20 @@ namespace TooliRent.Controllers
             var bookings = await _bookingService.GetBookingsWithLastDateWithinDateRangeAsync(startDate, endDate);
             return Ok(bookings);
         }
+
+        [HttpPut("cancel/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CancelBooking(int id)
+        {
+            var canceled = await _bookingService.CancelBookingAsync(id);
+
+            if (!canceled)
+            {
+                return NotFound("Active booking not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
