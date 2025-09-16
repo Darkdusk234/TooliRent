@@ -50,6 +50,20 @@ namespace TooliRent.Controllers
             return Ok();
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            var user = await _users.FindByNameAsync(loginDto.UserName);
+
+            if (user == null || !await _users.CheckPasswordAsync(user, loginDto.Password))
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            var token = await GenerateJwtTokenAsync(user);
+            return Ok(new { token });
+        }
+
         private async Task<string> GenerateJwtTokenAsync(IdentityUser user)
         {
             var jwt = _config.GetSection("Jwt");
