@@ -116,6 +116,7 @@ namespace TooliRent.Controllers
             return CreatedAtAction(nameof(GetBookingById), new { id = createdBooking.Id }, createdBooking);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
