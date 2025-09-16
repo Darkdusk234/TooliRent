@@ -5,7 +5,7 @@ using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
 {
-    internal class ToolService : IToolService
+    public class ToolService : IToolService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

@@ -6,7 +6,7 @@ using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
 {
-    internal class CategoryService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
