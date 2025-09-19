@@ -60,6 +60,11 @@ namespace TooliRent.Controllers
                 return Unauthorized("Invalid username or password.");
             }
 
+            if(!user.IsActive)
+            {
+                return Unauthorized("User is unactivated. Contact an admin if you think this is a mistake.");
+            }
+
             var token = await GenerateJwtTokenAsync(user);
             return Ok(new { token });
         }
