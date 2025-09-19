@@ -77,5 +77,21 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var deleted = await _categoryService.DeleteCategoryAsync(id);
+
+            if (!deleted)
+            {
+                return NotFound("Category not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
