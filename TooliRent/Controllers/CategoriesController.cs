@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TooliRent.Services.DTOs.BookingDtos;
+using TooliRent.Services.DTOs.CategoryDtos;
 using TooliRent.Services.Interfaces;
+using TooliRent.Services.Services;
 
 namespace TooliRent.Controllers
 {
@@ -18,7 +21,7 @@ namespace TooliRent.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
@@ -26,7 +29,7 @@ namespace TooliRent.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCategoryById(int id)
         {
@@ -36,6 +39,21 @@ namespace TooliRent.Controllers
                 return NotFound("Category not Found");
             }
             return Ok(category);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto createDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdCategory = await _categoryService.CreateCategoryAsync(createDto);
+            return CreatedAtAction(nameof(GetCategoryById), new { id = createdCategory.Id }, createdCategory);
         }
     }
 }
