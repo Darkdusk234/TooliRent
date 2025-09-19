@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -67,6 +69,27 @@ namespace TooliRent.Controllers
 
             var token = await GenerateJwtTokenAsync(user);
             return Ok(new { token });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> InActivateUser(string id)
+        {
+            var user = await _users.FindByIdAsync(id);
+
+            if(user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if(!user.IsActive)
+            {
+                return BadRequest("User already unactived");
+            }
+
+            user.IsActive = false;
+            await _users.UpdateAsync(user);
+            return Ok();
         }
 
         private async Task<string> GenerateJwtTokenAsync(User user)
