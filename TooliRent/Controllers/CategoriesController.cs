@@ -55,5 +55,27 @@ namespace TooliRent.Controllers
             var createdCategory = await _categoryService.CreateCategoryAsync(createDto);
             return CreatedAtAction(nameof(GetCategoryById), new { id = createdCategory.Id }, createdCategory);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto updateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updated = await _categoryService.UpdateCategoryAsync(id, updateDto);
+
+            if (!updated)
+            {
+                return NotFound("Category not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
