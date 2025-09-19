@@ -17,6 +17,12 @@ namespace TooliRent.Controllers
             _categoryService = categoryService;
         }
 
-
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            return Ok(categories);
+        }
     }
 }
