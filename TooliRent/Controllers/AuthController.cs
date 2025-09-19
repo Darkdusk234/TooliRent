@@ -92,6 +92,27 @@ namespace TooliRent.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPut("activate/{id}")]
+        public async Task<IActionResult> ActivateUser(string id)
+        {
+            var user = await _users.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            if (user.IsActive)
+            {
+                return BadRequest("User already actived");
+            }
+
+            user.IsActive = true;
+            await _users.UpdateAsync(user);
+            return Ok();
+        }
+
         private async Task<string> GenerateJwtTokenAsync(User user)
         {
             var jwt = _config.GetSection("Jwt");
