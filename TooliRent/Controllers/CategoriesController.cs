@@ -24,5 +24,18 @@ namespace TooliRent.Controllers
             var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetCategoryById(int id)
+        {
+            var category = await _categoryService.GetByCategoryIdAsync(id);
+            if (category == null)
+            {
+                return NotFound("Category not Found");
+            }
+            return Ok(category);
+        }
     }
 }
