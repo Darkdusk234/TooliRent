@@ -57,5 +57,20 @@ namespace TooliRent.Controllers
             var tools = await _toolService.GetToolsByCategoryAsync(categoryId);
             return Ok(tools);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ToolDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateTool([FromBody]CreateToolDto createToolDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdTool = await _toolService.CreateToolAsync(createToolDto);
+            return Ok(createdTool);
+        }
     }
 }
