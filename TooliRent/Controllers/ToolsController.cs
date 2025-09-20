@@ -94,5 +94,21 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteTool(int id)
+        {
+            var deleted = await _toolService.DeleteToolAsync(id);
+
+            if (!deleted)
+            {
+                return NotFound("Tool not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
