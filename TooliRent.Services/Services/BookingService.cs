@@ -84,6 +84,7 @@ namespace TooliRent.Services.Services
             return true;
         }
 
+        //Update to check if tool is available for booking duration
         public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
         {
             var newBooking = _mapper.Map<Booking>(createBookingDto);
