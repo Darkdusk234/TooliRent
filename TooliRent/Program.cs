@@ -80,6 +80,8 @@ namespace TooliRent
 
             // Service patterns
             builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IToolService, ToolService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             // Fluent Validation
             builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingDtoValidator>();
