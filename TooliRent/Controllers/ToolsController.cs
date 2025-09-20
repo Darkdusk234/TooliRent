@@ -49,5 +49,13 @@ namespace TooliRent.Controllers
 
             return Ok(tools);
         }
+
+        [HttpGet("categoryId/{id}")]
+        [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetToolsByCategoryId(int categoryId)
+        {
+            var tools = await _toolService.GetToolsByCategoryAsync(categoryId);
+            return Ok(tools);
+        }
     }
 }
