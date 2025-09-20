@@ -72,5 +72,27 @@ namespace TooliRent.Controllers
             var createdTool = await _toolService.CreateToolAsync(createToolDto);
             return Ok(createdTool);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateTool(int id, [FromBody] UpdateToolDto updateToolDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updated = await _toolService.UpdateToolAsync(id, updateToolDto);
+
+            if(!updated)
+            {
+                return NotFound("Tool not found.");
+            }
+
+            return NoContent();
+        }
     }
 }
