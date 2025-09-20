@@ -25,5 +25,20 @@ namespace TooliRent.Controllers
             var tools = await _toolService.GetAllToolsAsync();
             return Ok(tools);
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ToolDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetToolById(int id)
+        {
+            var tool = await _toolService.GetToolByIdAsync(id);
+
+            if(tool == null)
+            {
+                return NotFound("Tool not found.");
+            }
+
+            return Ok(tool);
+        }
     }
 }
