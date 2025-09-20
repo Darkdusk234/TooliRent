@@ -40,5 +40,14 @@ namespace TooliRent.Controllers
 
             return Ok(tool);
         }
+
+        [HttpGet("isAvailable/{available}")]
+        [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetToolsByAvailability(bool available)
+        {
+            var tools = await _toolService.GetToolsByAvailabilityAsync(available);
+
+            return Ok(tools);
+        }
     }
 }
