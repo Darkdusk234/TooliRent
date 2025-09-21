@@ -73,7 +73,7 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
         {
             var existingTool = await _unitOfWork.Tools.GetByIdAsync(toolId);
-            if(existingTool == null)
+            if(existingTool == null || !await _unitOfWork.Categories.ExistsAsync(updateToolDto.CategoryId))
             {
                 return false;
             }

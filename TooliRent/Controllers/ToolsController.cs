@@ -95,7 +95,7 @@ namespace TooliRent.Controllers
 
             if(!updated)
             {
-                return NotFound("Tool not found.");
+                return NotFound("Tool or category not found.");
             }
 
             return NoContent();
