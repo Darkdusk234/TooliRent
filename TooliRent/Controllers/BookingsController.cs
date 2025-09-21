@@ -152,7 +152,7 @@ namespace TooliRent.Controllers
 
             if (!updated)
             {
-                return NotFound("Booking not found.");
+                return NotFound("Booking, User or Tool not found.");
             }
 
             return NoContent();

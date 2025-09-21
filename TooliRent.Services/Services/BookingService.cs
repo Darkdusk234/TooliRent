@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using TooliRent.Core.Interfaces;
 using TooliRent.Core.Models;
 using TooliRent.Services.DTOs.BookingDtos;
+using TooliRent.Services.DTOs.ToolDtos;
 using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
@@ -94,7 +95,7 @@ namespace TooliRent.Services.Services
             var newBooking = _mapper.Map<Booking>(createBookingDto);
 
             if(!await _unitOfWork.Tools.ExistsAsync(createBookingDto.ToolId) ||
-               await _userManager.FindByIdAsync(createBookingDto.UserId) != null)
+               await _userManager.FindByIdAsync(createBookingDto.UserId) == null)
             {
                 return null;
             }
@@ -121,7 +122,7 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
         {
             var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
-            if (existingBooking == null)
+            if (existingBooking == null || !await _unitOfWork.Categories.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null)
             {
                 return false;
             }
