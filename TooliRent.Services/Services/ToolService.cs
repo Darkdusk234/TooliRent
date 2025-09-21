@@ -39,9 +39,14 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
-        public async Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
+        public async Task<ToolDto?> CreateToolAsync(CreateToolDto createToolDto)
         {
             var newTool = _mapper.Map<Core.Models.Tool>(createToolDto);
+
+            if(!await _unitOfWork.Categories.ExistsAsync(createToolDto.CategoryId))
+            {
+                return null;
+            }
 
             await _unitOfWork.Tools.AddAsync(newTool);
             await _unitOfWork.SaveChangesAsync();

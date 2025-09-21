@@ -70,6 +70,12 @@ namespace TooliRent.Controllers
             }
 
             var createdTool = await _toolService.CreateToolAsync(createToolDto);
+
+            if(createdTool == null)
+            {
+                return BadRequest("That category doesn't exist");
+            }
+
             return Ok(createdTool);
         }
 
