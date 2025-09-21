@@ -46,7 +46,10 @@ namespace TooliRent.Services.Services
             await _unitOfWork.Tools.AddAsync(newTool);
             await _unitOfWork.SaveChangesAsync();
 
+            var toolCategory = await _unitOfWork.Categories.GetByIdAsync(newTool.CategoryId);
+
             var createdTool = await _unitOfWork.Tools.GetByIdAsync(newTool.Id);
+            createdTool.Category = toolCategory;
             return _mapper.Map<ToolDto>(createdTool);
         }
 
