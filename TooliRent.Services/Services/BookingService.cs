@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using TooliRent.Core.Interfaces;
 using TooliRent.Core.Models;
 using TooliRent.Services.DTOs.BookingDtos;
@@ -10,10 +11,13 @@ namespace TooliRent.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public BookingService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly UserManager<User> _userManager;
+
+        public BookingService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> users)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = users;
         }
 
         public async Task<IEnumerable<BookingDto>> GetActiveBookingsAsync()
@@ -85,9 +89,15 @@ namespace TooliRent.Services.Services
         }
 
         //Update to check if tool is available for booking duration
-        public async Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto)
+        public async Task<BookingDto?> CreateBookingAsync(CreateBookingDto createBookingDto)
         {
             var newBooking = _mapper.Map<Booking>(createBookingDto);
+
+            if(!await _unitOfWork.Tools.ExistsAsync(createBookingDto.ToolId) ||
+               await _userManager.FindByIdAsync(createBookingDto.UserId) != null)
+            {
+                return null;
+            }
 
             await _unitOfWork.Bookings.AddAsync(newBooking);
             await _unitOfWork.SaveChangesAsync();

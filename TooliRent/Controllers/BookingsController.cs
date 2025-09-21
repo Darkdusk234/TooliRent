@@ -113,6 +113,12 @@ namespace TooliRent.Controllers
             }
 
             var createdBooking = await _bookingService.CreateBookingAsync(createBookingDto);
+
+            if (createdBooking == null)
+            {
+                return BadRequest("Tool or User doesn't exist.");
+            }
+
             return CreatedAtAction(nameof(GetBookingById), new { id = createdBooking.Id }, createdBooking);
         }
 

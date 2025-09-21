@@ -12,7 +12,7 @@ namespace TooliRent.Services.Interfaces
         Task<IEnumerable<BookingDto>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<BookingDto>> GetBookingsByPickupStatusAsync(bool isPickedUp);
         Task<IEnumerable<BookingDto>> GetBookingsByReturnStatusAsync(bool isReturned);
-        Task<BookingDto> CreateBookingAsync(CreateBookingDto createBookingDto);
+        Task<BookingDto?> CreateBookingAsync(CreateBookingDto createBookingDto);
         Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto);
         Task<bool> DeleteBookingAsync(int bookingId);
         Task<bool> CancelBookingAsync(int bookingId);
