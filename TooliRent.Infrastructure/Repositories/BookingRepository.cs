@@ -25,11 +25,11 @@ namespace TooliRent.Infrastructure.Repositories
         {
             if(isReturned)
             {
-                return await _dbSet.Where(b => b.ReturnDate == DateTime.MinValue).ToListAsync();
+                return await _dbSet.Where(b => b.ReturnDate != null).ToListAsync();
             }
             else
             {
-                return await _dbSet.Where(b => b.ReturnDate != DateTime.MinValue).ToListAsync();
+                return await _dbSet.Where(b => b.ReturnDate == null).ToListAsync();
             }
         }
 
@@ -43,9 +43,10 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.UserId == userId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Booking>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<Booking>> GetBookingsActiveWithinDateRangeAsync(DateTime startDate, DateTime endDate)
         {
-            return await _dbSet.Where(b => (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate)).ToListAsync();
+            
+            return await _dbSet.Where(b => (b.StartBookedDate <= endDate) && (b.LastBookedDate >= startDate) && b.ReturnDate == null).ToListAsync();
         }
     }
 }

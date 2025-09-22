@@ -59,7 +59,7 @@ namespace TooliRent.Controllers
         [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBookingsByReturnStatus(bool isReturned)
         {
-            var bookings = await _bookingService.GetBookingsByPickupStatusAsync(isReturned);
+            var bookings = await _bookingService.GetBookingsByReturnStatusAsync(isReturned);
             return Ok(bookings);
         }
 
@@ -81,9 +81,9 @@ namespace TooliRent.Controllers
 
         [HttpGet("daterange")]
         [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetBookingsWithLastDateWithinDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public async Task<IActionResult> GetBookingsActiveWithinDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
-            var bookings = await _bookingService.GetBookingsWithLastDateWithinDateRangeAsync(startDate, endDate);
+            var bookings = await _bookingService.GetBookingsActiveWithinDateRangeAsync(startDate, endDate);
             return Ok(bookings);
         }
 
