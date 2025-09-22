@@ -12,6 +12,12 @@ using TooliRent.Infrastructure.Repositories;
 using TooliRent.Services.Validators;
 using TooliRent.Services.Validators.BookingValidators;
 using TooliRent.Services.Mapping;
+using TooliRent.Services.Interfaces;
+using TooliRent.Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using FluentValidation.AspNetCore;
 
 namespace TooliRent
 {
@@ -72,8 +78,14 @@ namespace TooliRent
             // Repository patterns
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // Service patterns
+            builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IToolService, ToolService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+
             // Fluent Validation
             builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingDtoValidator>();
+            builder.Services.AddFluentValidationAutoValidation();
 
             // AutoMapper
             builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
@@ -104,6 +116,34 @@ namespace TooliRent
               .AddSignInManager()
               .AddDefaultTokenProviders();
 
+            var jwt = builder.Configuration.GetSection("Jwt");
+            var key = Encoding.UTF8.GetBytes(jwt["Key"]);
+
+            builder.Services
+              .AddAuthentication(options =>
+              {
+                  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+              })
+              .AddJwtBearer(options =>
+              {
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuer = true,
+                      ValidateAudience = true,
+                      ValidateLifetime = true,
+                      ValidateIssuerSigningKey = true,
+                      ValidIssuer = jwt["Issuer"],
+                      ValidAudience = jwt["Audience"],
+                      IssuerSigningKey = new SymmetricSecurityKey(key)
+                  };
+              });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -114,7 +154,8 @@ namespace TooliRent
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowAll");
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

@@ -5,7 +5,7 @@ using TooliRent.Services.Interfaces;
 
 namespace TooliRent.Services.Services
 {
-    internal class ToolService : IToolService
+    public class ToolService : IToolService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -39,14 +39,22 @@ namespace TooliRent.Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 
-        public async Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto)
+        public async Task<ToolDto?> CreateToolAsync(CreateToolDto createToolDto)
         {
             var newTool = _mapper.Map<Core.Models.Tool>(createToolDto);
+
+            if(!await _unitOfWork.Categories.ExistsAsync(createToolDto.CategoryId))
+            {
+                return null;
+            }
 
             await _unitOfWork.Tools.AddAsync(newTool);
             await _unitOfWork.SaveChangesAsync();
 
+            var toolCategory = await _unitOfWork.Categories.GetByIdAsync(newTool.CategoryId);
+
             var createdTool = await _unitOfWork.Tools.GetByIdAsync(newTool.Id);
+            createdTool.Category = toolCategory;
             return _mapper.Map<ToolDto>(createdTool);
         }
 
@@ -65,7 +73,7 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto)
         {
             var existingTool = await _unitOfWork.Tools.GetByIdAsync(toolId);
-            if(existingTool == null)
+            if(existingTool == null || !await _unitOfWork.Categories.ExistsAsync(updateToolDto.CategoryId))
             {
                 return false;
             }

@@ -17,6 +17,7 @@ namespace TooliRent.Core.Models
         public bool IsPickedUp { get; set; } = false;
         public bool IsCancelled { get; set; } = false;
         public DateTime? ReturnDate { get; set; }
+        public DateTime StartBookedDate {  get; set; } = DateTime.UtcNow;
         public DateTime LastBookedDate { get; set; } = DateTime.UtcNow;
 
         //Navigational Properties

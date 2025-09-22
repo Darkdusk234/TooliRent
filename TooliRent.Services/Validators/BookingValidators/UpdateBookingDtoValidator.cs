@@ -3,7 +3,7 @@ using TooliRent.Services.DTOs.BookingDtos;
 
 namespace TooliRent.Services.Validators.BookingValidators
 {
-    internal class UpdateBookingDtoValidator : AbstractValidator<UpdateBookingDto>
+    public class UpdateBookingDtoValidator : AbstractValidator<UpdateBookingDto>
     {
         public UpdateBookingDtoValidator()
         {
@@ -12,6 +12,10 @@ namespace TooliRent.Services.Validators.BookingValidators
 
             RuleFor(b => b.UserId)
                 .NotEmpty().WithMessage("User ID is required.");
+
+            RuleFor(b => b.StartBookedDate)
+               .GreaterThanOrEqualTo(DateTime.UtcNow).WithMessage("Start booked date must be today or in the future.")
+               .LessThan(b => b.LastBookedDate);
 
             RuleFor(b => b.LastBookedDate)
                 .GreaterThanOrEqualTo(DateTime.UtcNow.AddDays(1)).WithMessage("Booked date must be in the future.");
