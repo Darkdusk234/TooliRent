@@ -45,8 +45,9 @@ namespace TooliRent.Infrastructure.Repositories
 
         public async Task<IEnumerable<Booking>> GetBookingsActiveWithinDateRangeAsync(DateTime startDate, DateTime endDate)
         {
-            
-            return await _dbSet.Where(b => (b.StartBookedDate <= endDate) && (b.LastBookedDate >= startDate) && b.ReturnDate == null).ToListAsync();
+            return await _dbSet.Where(b => ((b.StartBookedDate >= startDate && b.StartBookedDate < endDate) 
+            || (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate))
+            && (b.ReturnDate == null && b.IsCancelled != true)).ToListAsync();
         }
     }
 }
