@@ -123,7 +123,8 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
         {
             var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
-            if (existingBooking == null || !await _unitOfWork.Tools.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null)
+            if (existingBooking == null || !await _unitOfWork.Tools.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null ||
+                existingBooking.IsCancelled || existingBooking.ReturnDate != null)
             {
                 return false;
             }
