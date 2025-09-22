@@ -102,6 +102,7 @@ namespace TooliRent.Services.Services
 
             await _unitOfWork.Bookings.AddAsync(newBooking);
             await _unitOfWork.SaveChangesAsync();
+            await SetToolAvailability(createBookingDto.ToolId, false);
 
             var createdBooking = await _unitOfWork.Bookings.GetByIdAsync(newBooking.Id);
             return _mapper.Map<BookingDto>(createdBooking);
@@ -122,9 +123,15 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
         {
             var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
-            if (existingBooking == null || !await _unitOfWork.Categories.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null)
+            if (existingBooking == null || !await _unitOfWork.Tools.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null)
             {
                 return false;
+            }
+
+            if(existingBooking.ToolId != updateBookingDto.ToolId)
+            {
+                await SetToolAvailability(existingBooking.ToolId, true);
+                await SetToolAvailability(updateBookingDto.ToolId, false);
             }
 
             _mapper.Map(updateBookingDto, existingBooking);
@@ -137,6 +144,21 @@ namespace TooliRent.Services.Services
         public async Task<bool> BookingExistsAsync(int bookingId)
         {
             return await _unitOfWork.Bookings.ExistsAsync(bookingId);
+        }
+
+        private async Task<bool> SetToolAvailability(int toolId, bool isAvailable)
+        {
+            var tool = await _unitOfWork.Tools.GetByIdAsync(toolId);
+
+            if (tool == null)
+            {
+                return false;
+            }
+
+            tool.Available = isAvailable;
+            await _unitOfWork.Tools.UpdateAsync(tool);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
         }
     }
 }
