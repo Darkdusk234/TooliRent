@@ -116,7 +116,7 @@ namespace TooliRent.Controllers
 
             if (createdBooking == null)
             {
-                return BadRequest("Tool or User doesn't exist.");
+                return BadRequest("Tool or User doesn't exist. Or tool is not available during all these days.");
             }
 
             return CreatedAtAction(nameof(GetBookingById), new { id = createdBooking.Id }, createdBooking);
