@@ -21,15 +21,15 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.IsPickedUp == isPickedUp).ToListAsync();
         }
 
-        public Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned)
+        public async Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned)
         {
             if(isReturned)
             {
-                return Task.FromResult(_dbSet.Where(b => b.ReturnDate == DateTime.MinValue).AsEnumerable());
+                return await _dbSet.Where(b => b.ReturnDate == DateTime.MinValue).ToListAsync();
             }
             else
             {
-                return Task.FromResult(_dbSet.Where(b => b.ReturnDate != DateTime.MinValue).AsEnumerable());
+                return await _dbSet.Where(b => b.ReturnDate != DateTime.MinValue).ToListAsync();
             }
         }
 
