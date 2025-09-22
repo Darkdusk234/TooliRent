@@ -70,6 +70,7 @@ namespace TooliRent.Infrastructure.Data
         {
             // Static DateTime to avoid dynamic changes
             DateTime staticDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Utc);
+            DateTime startStaticDate = new DateTime(2025, 10, 06, 0, 0, 0, 0, DateTimeKind.Utc);
 
             // Seed Categories
             modelBuilder.Entity<Category>().HasData(
@@ -107,6 +108,7 @@ namespace TooliRent.Infrastructure.Data
                     CreatedDate = new DateTime(2025, 09, 05),
                     IsPickedUp = false,
                     IsCancelled = false,
+                    StartBookedDate = startStaticDate,
                     LastBookedDate = staticDate
                 },
                 new Booking
@@ -118,6 +120,7 @@ namespace TooliRent.Infrastructure.Data
                     IsPickedUp = true,
                     IsCancelled = false,
                     ReturnDate = new DateTime(2025, 09, 04),
+                    StartBookedDate = startStaticDate,
                     LastBookedDate = staticDate
                 }
                 );
