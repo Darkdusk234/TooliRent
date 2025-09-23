@@ -10,5 +10,6 @@ namespace TooliRent.Core.Interfaces
         public Task<IEnumerable<Booking>> GetBookingsActiveWithinDateRangeAsync(DateTime startDate, DateTime endDate);
         public Task<IEnumerable<Booking>> GetBookingsByPickupStatusAsync(bool isPickedUp);
         public Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned);
+        public Task<bool> ActiveToolBookingExistsWithinDateRange(DateTime startDate, DateTime endDate, int toolId);
     }
 }
