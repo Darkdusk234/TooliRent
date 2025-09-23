@@ -55,7 +55,7 @@ namespace TooliRent.Infrastructure.Repositories
             var existingBookings = await _dbSet.Where(b => ((b.StartBookedDate >= startDate && b.StartBookedDate <= endDate)
             || (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate))
             && (b.ReturnDate == null && b.IsCancelled != true) && (b.ToolId == toolId)).ToListAsync();
-            return existingBookings.Count == 0;
+            return existingBookings.Count != 0;
         }
     }
 }
