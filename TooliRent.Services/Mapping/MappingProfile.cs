@@ -14,6 +14,8 @@ namespace TooliRent.Services.Mapping
             CreateMap<Tool, ToolDto>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name));
 
+            CreateMap<Tool, ToolInfoDto>();
+
             CreateMap<CreateToolDto, Tool>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Category, opt => opt.Ignore())
@@ -26,10 +28,9 @@ namespace TooliRent.Services.Mapping
 
             // Booking Mappings
             CreateMap<Booking, BookingDto>()
-                .ForMember(dest => dest.ToolType, opt => opt.MapFrom(src => src.Tool.ToolType))
+                .ForMember(dest => dest.Tools, opt => opt.Ignore())
                 .ForMember(dest => dest.UserFirstName, opt => opt.MapFrom(src => src.User.FirstName))
-                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.LastName))
-                .ForMember(dest => dest.ToolDescription, opt => opt.MapFrom(src => src.Tool.Description));
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.LastName));
 
             CreateMap<CreateBookingDto, Booking>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
