@@ -104,7 +104,7 @@ namespace TooliRent.Infrastructure.Data
                 {
                     Id = 1,
                     UserId = "admin",
-                    ToolId = 1,
+                    ToolId = {1},
                     CreatedDate = new DateTime(2025, 09, 05),
                     IsPickedUp = false,
                     IsCancelled = false,
@@ -115,7 +115,7 @@ namespace TooliRent.Infrastructure.Data
                 {
                     Id = 2,
                     UserId = "admin",
-                    ToolId = 2,
+                    ToolId = {2},
                     CreatedDate = new DateTime(2025, 08, 30),
                     IsPickedUp = true,
                     IsCancelled = false,

@@ -35,7 +35,7 @@ namespace TooliRent.Infrastructure.Repositories
 
         public async Task<IEnumerable<Booking>> GetBookingsByToolIdAsync(int toolId)
         {
-            return await _dbSet.Where(b => b.ToolId == toolId).ToListAsync();
+            return await _dbSet.Where(b => b.ToolId.Contains(toolId)).ToListAsync();
         }
 
         public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId)
@@ -54,7 +54,7 @@ namespace TooliRent.Infrastructure.Repositories
         {
             var existingBookings = await _dbSet.Where(b => ((b.StartBookedDate >= startDate && b.StartBookedDate <= endDate)
             || (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate))
-            && (b.ReturnDate == null && b.IsCancelled != true) && (b.ToolId == toolId)).ToListAsync();
+            && (b.ReturnDate == null && b.IsCancelled != true) && (b.ToolId.Contains(toolId))).ToListAsync();
             return existingBookings.Count != 0;
         }
     }

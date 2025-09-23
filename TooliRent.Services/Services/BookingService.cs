@@ -94,15 +94,25 @@ namespace TooliRent.Services.Services
         {
             var newBooking = _mapper.Map<Booking>(createBookingDto);
 
-            if(!await _unitOfWork.Tools.ExistsAsync(createBookingDto.ToolId) ||
-               await _userManager.FindByIdAsync(createBookingDto.UserId) == null)
+            foreach(var toolId in createBookingDto.ToolId)
+            {
+                if (!await _unitOfWork.Tools.ExistsAsync(toolId))
+                {
+                    return null;
+                }
+            }
+
+            if (await _userManager.FindByIdAsync(createBookingDto.UserId) == null)
             {
                 return null;
             }
 
-            if(await _unitOfWork.Bookings.ActiveToolBookingExistsWithinDateRange(createBookingDto.StartBookedDate, createBookingDto.LastBookedDate, createBookingDto.ToolId))
+            foreach (var toolId in createBookingDto.ToolId)
             {
-                return null;
+                if (await _unitOfWork.Bookings.ActiveToolBookingExistsWithinDateRange(createBookingDto.StartBookedDate, createBookingDto.LastBookedDate, toolId))
+                {
+                    return null;
+                }
             }
 
             await _unitOfWork.Bookings.AddAsync(newBooking);
@@ -128,7 +138,16 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
         {
             var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
-            if (existingBooking == null || !await _unitOfWork.Tools.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null ||
+
+            foreach(var toolId in updateBookingDto.ToolId)
+            {
+                if (!await _unitOfWork.Tools.ExistsAsync(toolId))
+                {
+                    return false;
+                }
+            }
+
+            if (existingBooking == null || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null ||
                 existingBooking.IsCancelled || existingBooking.ReturnDate != null)
             {
                 return false;
@@ -152,17 +171,27 @@ namespace TooliRent.Services.Services
             return await _unitOfWork.Bookings.ExistsAsync(bookingId);
         }
 
-        private async Task<bool> SetToolAvailability(int toolId, bool isAvailable)
+        private async Task<bool> SetToolAvailability(IList<int> toolId, bool isAvailable)
         {
-            var tool = await _unitOfWork.Tools.GetByIdAsync(toolId);
-
-            if (tool == null)
+            IList<Tool> tools = new List<Tool>();
+            foreach (var id in toolId)
             {
-                return false;
+                var tool = await _unitOfWork.Tools.GetByIdAsync(id);
+
+                if (tool == null)
+                {
+                    return false;
+                }
+
+                tools.Add(tool);
             }
 
-            tool.Available = isAvailable;
-            await _unitOfWork.Tools.UpdateAsync(tool);
+            foreach (var tool in tools)
+            {
+                tool.Available = isAvailable;
+                await _unitOfWork.Tools.UpdateAsync(tool);
+            }
+           
             await _unitOfWork.SaveChangesAsync();
             return true;
         }

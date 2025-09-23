@@ -11,7 +11,7 @@ namespace TooliRent.Core.Models
         public string UserId { get; set; } = string.Empty;
 
         [Required]
-        public int ToolId { get; set; }
+        public IList<int> ToolId { get; set; } = [];
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public bool IsPickedUp { get; set; } = false;

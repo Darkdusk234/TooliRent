@@ -8,7 +8,9 @@ namespace TooliRent.Services.Validators.BookingValidators
         public UpdateBookingDtoValidator()
         {
             RuleFor(b => b.ToolId)
-                .GreaterThan(0).WithMessage("Valid tool must be selected.");
+                .NotEmpty().WithMessage("At least one tool must be selected.")
+                .Must(toolIds => toolIds.All(id => id > 0)).WithMessage("All selected tools must be valid.")
+                .Must(toolIds => toolIds.Distinct().Count() == toolIds.Count).WithMessage("Duplicate tools are not allowed.");
 
             RuleFor(b => b.UserId)
                 .NotEmpty().WithMessage("User ID is required.");
