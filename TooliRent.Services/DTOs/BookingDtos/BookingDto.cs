@@ -9,7 +9,6 @@ namespace TooliRent.Services.DTOs.BookingDtos
         public string? UserFirstName { get; set; }
         public string? UserLastName { get; set; }
         public IList<int> ToolIds { get; set; } = [];
-        public IList<ToolInfoDto>? Tools { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsPickedUp { get; set; }
         public bool IsCancelled { get; set; }
