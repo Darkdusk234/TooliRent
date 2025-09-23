@@ -196,6 +196,23 @@ namespace TooliRent.Services.Services
             return true;
         }
 
+        public async Task<bool> MarkBookingAsReturnedAsync(int bookingId)
+        {
+            var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
+
+            if (existingBooking == null || existingBooking.IsCancelled || !existingBooking.IsPickedUp || existingBooking.ReturnDate != null)
+            {
+                return false;
+            }
+
+            existingBooking.ReturnDate = DateTime.UtcNow;
+
+            await _unitOfWork.Bookings.UpdateAsync(existingBooking);
+            await _unitOfWork.SaveChangesAsync();
+            await SetToolAvailability(existingBooking.ToolId, true);
+            return true;
+        }
+
         public async Task<bool> BookingExistsAsync(int bookingId)
         {
             return await _unitOfWork.Bookings.ExistsAsync(bookingId);
