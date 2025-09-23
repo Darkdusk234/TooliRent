@@ -7,6 +7,6 @@
         public bool IsPickedUp { get; set; }
         public DateTime? ReturnDate { get; set; }
         public DateTime StartBookedDate { get; set; } = DateTime.UtcNow;
-        public DateTime? LastBookedDate { get; set; }
+        public DateTime LastBookedDate { get; set; } = DateTime.UtcNow;
     }
 }

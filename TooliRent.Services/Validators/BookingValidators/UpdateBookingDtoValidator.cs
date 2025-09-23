@@ -20,6 +20,7 @@ namespace TooliRent.Services.Validators.BookingValidators
                .LessThan(b => b.LastBookedDate);
 
             RuleFor(b => b.LastBookedDate)
+                .NotEmpty().WithMessage("Last booked date is required.")
                 .GreaterThanOrEqualTo(DateTime.UtcNow.AddDays(1)).WithMessage("Booked date must be in the future.");
         }
     }
