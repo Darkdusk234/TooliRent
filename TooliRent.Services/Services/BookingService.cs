@@ -100,6 +100,11 @@ namespace TooliRent.Services.Services
                 return null;
             }
 
+            if(await _unitOfWork.Bookings.ActiveToolBookingExistsWithinDateRange(createBookingDto.StartBookedDate, createBookingDto.LastBookedDate, createBookingDto.ToolId))
+            {
+                return null;
+            }
+
             await _unitOfWork.Bookings.AddAsync(newBooking);
             await _unitOfWork.SaveChangesAsync();
             await SetToolAvailability(createBookingDto.ToolId, false);
