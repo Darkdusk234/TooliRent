@@ -109,7 +109,7 @@ namespace TooliRent.Services.Services
 
             foreach (var toolId in createBookingDto.ToolId)
             {
-                if (await _unitOfWork.Bookings.ActiveToolBookingExistsWithinDateRange(createBookingDto.StartBookedDate, createBookingDto.LastBookedDate, toolId))
+                if ((await _unitOfWork.Bookings.GetActiveToolBookingWithinDateRange(createBookingDto.StartBookedDate, createBookingDto.LastBookedDate, toolId)).Count() != 0)
                 {
                     return null;
                 }
@@ -157,6 +157,20 @@ namespace TooliRent.Services.Services
             {
                 await SetToolAvailability(existingBooking.ToolId, true);
                 await SetToolAvailability(updateBookingDto.ToolId, false);
+            }
+
+            foreach (var toolId in updateBookingDto.ToolId)
+            {
+                var bookings = await _unitOfWork.Bookings.GetActiveToolBookingWithinDateRange(updateBookingDto.StartBookedDate, updateBookingDto.LastBookedDate, toolId);
+                if(bookings.Count() != 1)
+                {
+                    return false;
+                }
+
+                if(bookings.FirstOrDefault().Id != bookingId)
+                {
+                    return false;
+                }
             }
 
             _mapper.Map(updateBookingDto, existingBooking);
