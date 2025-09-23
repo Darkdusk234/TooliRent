@@ -117,7 +117,6 @@ namespace TooliRent.Services.Services
 
             await _unitOfWork.Bookings.AddAsync(newBooking);
             await _unitOfWork.SaveChangesAsync();
-            await SetToolAvailability(createBookingDto.ToolId, false);
 
             var createdBooking = await _unitOfWork.Bookings.GetByIdAsync(newBooking.Id);
             return _mapper.Map<BookingDto>(createdBooking);
@@ -151,12 +150,6 @@ namespace TooliRent.Services.Services
                 existingBooking.IsCancelled || existingBooking.ReturnDate != null)
             {
                 return false;
-            }
-
-            if(existingBooking.ToolId != updateBookingDto.ToolId)
-            {
-                await SetToolAvailability(existingBooking.ToolId, true);
-                await SetToolAvailability(updateBookingDto.ToolId, false);
             }
 
             foreach (var toolId in updateBookingDto.ToolId)
