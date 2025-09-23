@@ -172,5 +172,20 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("return/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ReturnTools(int bookingId)
+        {
+            var returned = await _bookingService.MarkBookingAsReturnedAsync(bookingId);
+
+            if (!returned)
+            {
+                return NotFound("Active booking not found or tools already returned.");
+            }
+
+            return NoContent();
+        }
     }
 }
