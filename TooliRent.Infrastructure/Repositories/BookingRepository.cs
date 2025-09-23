@@ -50,12 +50,12 @@ namespace TooliRent.Infrastructure.Repositories
             && (b.ReturnDate == null && b.IsCancelled != true)).ToListAsync();
         }
 
-        public async Task<bool> ActiveToolBookingExistsWithinDateRange(DateTime startDate, DateTime endDate, int toolId)
+        public async Task<IEnumerable<Booking>> GetActiveToolBookingWithinDateRange(DateTime startDate, DateTime endDate, int toolId)
         {
             var existingBookings = await _dbSet.Where(b => ((b.StartBookedDate >= startDate && b.StartBookedDate <= endDate)
             || (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate))
             && (b.ReturnDate == null && b.IsCancelled != true) && (b.ToolId.Contains(toolId))).ToListAsync();
-            return existingBookings.Count != 0;
+            return existingBookings;
         }
     }
 }
