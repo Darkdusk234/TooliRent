@@ -157,5 +157,20 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("pickup/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PickupTools(int bookingId)
+        {
+            var pickedUp = await _bookingService.MarkBookingAsPickedUpAsync(bookingId);
+
+            if (!pickedUp)
+            {
+                return NotFound("Active booking not found or tools already picked up.");
+            }
+
+            return NoContent();
+        }
     }
 }
