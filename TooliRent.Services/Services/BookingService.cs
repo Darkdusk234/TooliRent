@@ -24,7 +24,7 @@ namespace TooliRent.Services.Services
         public async Task<IEnumerable<BookingDto>> GetActiveBookingsAsync()
         {
             var bookings = await _unitOfWork.Bookings.GetActiveBookingsAsync();
-            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings); ;
         }
 
         public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()

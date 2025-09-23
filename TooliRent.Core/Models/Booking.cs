@@ -22,6 +22,6 @@ namespace TooliRent.Core.Models
 
         //Navigational Properties
         public User User { get; set; } = null!;
-        public Tool Tool { get; set; } = null!;
+        public IList<Tool> Tools { get; set; } = null!;
     }
 }
