@@ -14,8 +14,6 @@ namespace TooliRent.Services.Mapping
             CreateMap<Tool, ToolDto>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name));
 
-            CreateMap<Tool, ToolInfoDto>();
-
             CreateMap<CreateToolDto, Tool>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Category, opt => opt.Ignore())
