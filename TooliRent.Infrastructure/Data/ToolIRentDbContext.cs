@@ -38,17 +38,15 @@ namespace TooliRent.Infrastructure.Data
                 entity.Property(e => e.Description).HasMaxLength(255);
                 entity.Property(e => e.Available).HasDefaultValue(true);
                 entity.HasMany(e => e.Bookings)
-                      .WithOne(b => b.Tool)
-                      .HasForeignKey(b => b.ToolId);
+                      .WithMany(b => b.Tools);
             });
 
             //Configure Booking entity
             modelBuilder.Entity<Booking>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Tool)
-                      .WithMany(t => t.Bookings)
-                      .HasForeignKey(e => e.ToolId);
+                entity.HasMany(e => e.Tools)
+                      .WithMany(t => t.Bookings);
                 entity.HasOne(e => e.User)
                       .WithMany(u => u.Bookings)
                       .HasForeignKey(e => e.UserId);
@@ -104,7 +102,7 @@ namespace TooliRent.Infrastructure.Data
                 {
                     Id = 1,
                     UserId = "admin",
-                    ToolId = 1,
+                    ToolId = {1},
                     CreatedDate = new DateTime(2025, 09, 05),
                     IsPickedUp = false,
                     IsCancelled = false,
@@ -115,7 +113,7 @@ namespace TooliRent.Infrastructure.Data
                 {
                     Id = 2,
                     UserId = "admin",
-                    ToolId = 2,
+                    ToolId = {2},
                     CreatedDate = new DateTime(2025, 08, 30),
                     IsPickedUp = true,
                     IsCancelled = false,

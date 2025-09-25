@@ -116,7 +116,7 @@ namespace TooliRent.Controllers
 
             if (createdBooking == null)
             {
-                return BadRequest("Tool or User doesn't exist.");
+                return BadRequest("Tool or User doesn't exist. Or tool is not available during all these days.");
             }
 
             return CreatedAtAction(nameof(GetBookingById), new { id = createdBooking.Id }, createdBooking);
@@ -153,6 +153,36 @@ namespace TooliRent.Controllers
             if (!updated)
             {
                 return NotFound("Booking, User or Tool not found.");
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("pickup/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PickupTools(int bookingId)
+        {
+            var pickedUp = await _bookingService.MarkBookingAsPickedUpAsync(bookingId);
+
+            if (!pickedUp)
+            {
+                return NotFound("Active booking not found or tools already picked up.");
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("return/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ReturnTools(int bookingId)
+        {
+            var returned = await _bookingService.MarkBookingAsReturnedAsync(bookingId);
+
+            if (!returned)
+            {
+                return NotFound("Active booking not found or tools already returned.");
             }
 
             return NoContent();

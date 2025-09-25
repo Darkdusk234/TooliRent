@@ -16,6 +16,8 @@ namespace TooliRent.Services.Interfaces
         Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto);
         Task<bool> DeleteBookingAsync(int bookingId);
         Task<bool> CancelBookingAsync(int bookingId);
+        Task<bool> MarkBookingAsPickedUpAsync(int bookingId);
+        Task<bool> MarkBookingAsReturnedAsync(int bookingId);
         Task<bool> BookingExistsAsync(int bookingId);
     }
 }

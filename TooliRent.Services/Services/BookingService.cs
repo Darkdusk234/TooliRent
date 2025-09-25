@@ -24,7 +24,7 @@ namespace TooliRent.Services.Services
         public async Task<IEnumerable<BookingDto>> GetActiveBookingsAsync()
         {
             var bookings = await _unitOfWork.Bookings.GetActiveBookingsAsync();
-            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings); ;
         }
 
         public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
@@ -94,15 +94,29 @@ namespace TooliRent.Services.Services
         {
             var newBooking = _mapper.Map<Booking>(createBookingDto);
 
-            if(!await _unitOfWork.Tools.ExistsAsync(createBookingDto.ToolId) ||
-               await _userManager.FindByIdAsync(createBookingDto.UserId) == null)
+            foreach(var toolId in createBookingDto.ToolId)
+            {
+                if (!await _unitOfWork.Tools.ExistsAsync(toolId))
+                {
+                    return null;
+                }
+            }
+
+            if (await _userManager.FindByIdAsync(createBookingDto.UserId) == null)
             {
                 return null;
             }
 
+            foreach (var toolId in createBookingDto.ToolId)
+            {
+                if ((await _unitOfWork.Bookings.GetActiveToolBookingWithinDateRange(createBookingDto.StartBookedDate, createBookingDto.LastBookedDate, toolId)).Count() != 0)
+                {
+                    return null;
+                }
+            }
+
             await _unitOfWork.Bookings.AddAsync(newBooking);
             await _unitOfWork.SaveChangesAsync();
-            await SetToolAvailability(createBookingDto.ToolId, false);
 
             var createdBooking = await _unitOfWork.Bookings.GetByIdAsync(newBooking.Id);
             return _mapper.Map<BookingDto>(createdBooking);
@@ -123,16 +137,33 @@ namespace TooliRent.Services.Services
         public async Task<bool> UpdateBookingAsync(int bookingId, UpdateBookingDto updateBookingDto)
         {
             var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
-            if (existingBooking == null || !await _unitOfWork.Tools.ExistsAsync(updateBookingDto.ToolId) || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null ||
+
+            foreach(var toolId in updateBookingDto.ToolId)
+            {
+                if (!await _unitOfWork.Tools.ExistsAsync(toolId))
+                {
+                    return false;
+                }
+            }
+
+            if (existingBooking == null || await _userManager.FindByIdAsync(updateBookingDto.UserId) == null ||
                 existingBooking.IsCancelled || existingBooking.ReturnDate != null)
             {
                 return false;
             }
 
-            if(existingBooking.ToolId != updateBookingDto.ToolId)
+            foreach (var toolId in updateBookingDto.ToolId)
             {
-                await SetToolAvailability(existingBooking.ToolId, true);
-                await SetToolAvailability(updateBookingDto.ToolId, false);
+                var bookings = await _unitOfWork.Bookings.GetActiveToolBookingWithinDateRange(updateBookingDto.StartBookedDate, updateBookingDto.LastBookedDate, toolId);
+                if(bookings.Count() != 1)
+                {
+                    return false;
+                }
+
+                if(bookings.FirstOrDefault().Id != bookingId)
+                {
+                    return false;
+                }
             }
 
             _mapper.Map(updateBookingDto, existingBooking);
@@ -142,22 +173,65 @@ namespace TooliRent.Services.Services
             return true;
         }
 
+        public async Task<bool> MarkBookingAsPickedUpAsync(int bookingId)
+        {
+            var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
+
+            if (existingBooking == null || existingBooking.IsCancelled || existingBooking.IsPickedUp || existingBooking.ReturnDate != null)
+            {
+                return false;
+            }
+
+            existingBooking.IsPickedUp = true;
+            await _unitOfWork.Bookings.UpdateAsync(existingBooking);
+            await _unitOfWork.SaveChangesAsync();
+            await SetToolAvailability(existingBooking.ToolId, false);
+            return true;
+        }
+
+        public async Task<bool> MarkBookingAsReturnedAsync(int bookingId)
+        {
+            var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(bookingId);
+
+            if (existingBooking == null || existingBooking.IsCancelled || !existingBooking.IsPickedUp || existingBooking.ReturnDate != null)
+            {
+                return false;
+            }
+
+            existingBooking.ReturnDate = DateTime.UtcNow;
+
+            await _unitOfWork.Bookings.UpdateAsync(existingBooking);
+            await _unitOfWork.SaveChangesAsync();
+            await SetToolAvailability(existingBooking.ToolId, true);
+            return true;
+        }
+
         public async Task<bool> BookingExistsAsync(int bookingId)
         {
             return await _unitOfWork.Bookings.ExistsAsync(bookingId);
         }
 
-        private async Task<bool> SetToolAvailability(int toolId, bool isAvailable)
+        private async Task<bool> SetToolAvailability(IList<int> toolId, bool isAvailable)
         {
-            var tool = await _unitOfWork.Tools.GetByIdAsync(toolId);
-
-            if (tool == null)
+            IList<Tool> tools = new List<Tool>();
+            foreach (var id in toolId)
             {
-                return false;
+                var tool = await _unitOfWork.Tools.GetByIdAsync(id);
+
+                if (tool == null)
+                {
+                    return false;
+                }
+
+                tools.Add(tool);
             }
 
-            tool.Available = isAvailable;
-            await _unitOfWork.Tools.UpdateAsync(tool);
+            foreach (var tool in tools)
+            {
+                tool.Available = isAvailable;
+                await _unitOfWork.Tools.UpdateAsync(tool);
+            }
+           
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
