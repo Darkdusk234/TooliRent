@@ -187,5 +187,13 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("lateReturns")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetLateReturnBookings()
+        {
+            var bookings = await _bookingService.GetNotHandledLateReturnedBookings();
+            return Ok(bookings);
+        }
     }
 }
