@@ -57,5 +57,10 @@ namespace TooliRent.Infrastructure.Repositories
             && (b.ReturnDate == null && b.IsCancelled != true) && (b.ToolId.Contains(toolId))).ToListAsync();
             return existingBookings;
         }
+
+        public async Task<IEnumerable<Booking>> GetNotHandledLateReturnedBookings()
+        {
+            return await _dbSet.Where(b => b.ReturnDate != null && b.ReturnDate > b.LastBookedDate && b.LateReturnHandled == false).ToListAsync();
+        }
     }
 }

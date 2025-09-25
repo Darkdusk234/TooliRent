@@ -187,5 +187,28 @@ namespace TooliRent.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("lateReturns")]
+        [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetLateReturnBookings()
+        {
+            var bookings = await _bookingService.GetNotHandledLateReturnedBookings();
+            return Ok(bookings);
+        }
+
+        [HttpPut("lateReturnHandled/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> MarkLateReturnAsHandled(int id)
+        {
+            var handled = await _bookingService.MarkLateReturnAsHandled(id);
+
+            if (!handled)
+            {
+                return NotFound("Late return booking not found or has no late return to handle.");
+            }
+
+            return NoContent();
+        }
     }
 }

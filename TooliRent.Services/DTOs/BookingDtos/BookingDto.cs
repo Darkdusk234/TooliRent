@@ -15,6 +15,7 @@ namespace TooliRent.Services.DTOs.BookingDtos
         public DateTime? ReturnDate { get; set; }
         public DateTime StartBookedDate { get; set; }
         public DateTime LastBookedDate { get; set; }
+        public bool LateReturnHandled { get; set; }
 
     }
 }
