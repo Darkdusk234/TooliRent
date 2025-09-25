@@ -19,6 +19,7 @@ namespace TooliRent.Core.Models
         public DateTime? ReturnDate { get; set; }
         public DateTime StartBookedDate {  get; set; } = DateTime.UtcNow;
         public DateTime LastBookedDate { get; set; } = DateTime.UtcNow;
+        public bool LateReturnHandled { get; set; } = false;
 
         //Navigational Properties
         public User User { get; set; } = null!;
