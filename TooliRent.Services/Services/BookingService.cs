@@ -206,6 +206,12 @@ namespace TooliRent.Services.Services
             return true;
         }
 
+        public async Task<IEnumerable<BookingDto>> GetNotHandledLateReturnedBookings()
+        {
+            var bookings = await _unitOfWork.Bookings.GetNotHandledLateReturnedBookings();
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+        }
+
         public async Task<bool> BookingExistsAsync(int bookingId)
         {
             return await _unitOfWork.Bookings.ExistsAsync(bookingId);
