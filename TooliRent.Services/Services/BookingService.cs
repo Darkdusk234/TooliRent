@@ -206,6 +206,23 @@ namespace TooliRent.Services.Services
             return true;
         }
 
+       public async Task<bool> MarkLateReturnAsHandled(int id)
+        {
+            var existingBooking = await _unitOfWork.Bookings.GetByIdAsync(id);
+
+            if(existingBooking == null || existingBooking.IsCancelled || existingBooking.ReturnDate == null ||
+               existingBooking.ReturnDate !> existingBooking.LastBookedDate || existingBooking.LateReturnHandled)
+            {
+                return false;
+            }
+
+            existingBooking.LateReturnHandled = true;
+
+            await _unitOfWork.Bookings.UpdateAsync(existingBooking);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<IEnumerable<BookingDto>> GetNotHandledLateReturnedBookings()
         {
             var bookings = await _unitOfWork.Bookings.GetNotHandledLateReturnedBookings();
