@@ -8,7 +8,7 @@ namespace TooliRent.Services.Interfaces
         Task<ToolDto?> GetToolByIdAsync(int toolId);
         Task<IEnumerable<ToolDto>> GetToolsByAvailabilityAsync(bool available);
         Task<IEnumerable<ToolDto>> GetToolsByCategoryAsync(int categoryId);
-        Task<ToolDto> CreateToolAsync(CreateToolDto createToolDto);
+        Task<ToolDto?> CreateToolAsync(CreateToolDto createToolDto);
         Task<bool> UpdateToolAsync(int toolId, UpdateToolDto updateToolDto);
         Task<bool> DeleteToolAsync(int toolId);
         Task<bool> IsToolAvailableAsync(int toolId);

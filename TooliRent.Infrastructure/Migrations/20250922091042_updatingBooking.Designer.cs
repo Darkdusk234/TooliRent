@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TooliRent.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TooliRent.Infrastructure.Data;
 namespace TooliRent.Infrastructure.Migrations
 {
     [DbContext(typeof(ToolIRentDbContext))]
-    partial class ToolIRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250922091042_updatingBooking")]
+    partial class updatingBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace TooliRent.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BookingTool", b =>
-                {
-                    b.Property<int>("BookingsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ToolsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookingsId", "ToolsId");
-
-                    b.HasIndex("ToolsId");
-
-                    b.ToTable("BookingTool");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -196,15 +184,16 @@ namespace TooliRent.Infrastructure.Migrations
                     b.Property<DateTime>("StartBookedDate")
                         .HasColumnType("datetime2");
 
-                    b.PrimitiveCollection<string>("ToolId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ToolId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ToolId");
 
                     b.HasIndex("UserId");
 
@@ -219,7 +208,7 @@ namespace TooliRent.Infrastructure.Migrations
                             IsPickedUp = false,
                             LastBookedDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             StartBookedDate = new DateTime(2025, 10, 6, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ToolId = "[1]",
+                            ToolId = 1,
                             UserId = "admin"
                         },
                         new
@@ -231,7 +220,7 @@ namespace TooliRent.Infrastructure.Migrations
                             LastBookedDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             ReturnDate = new DateTime(2025, 9, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             StartBookedDate = new DateTime(2025, 10, 6, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ToolId = "[2]",
+                            ToolId = 2,
                             UserId = "admin"
                         });
                 });
@@ -403,21 +392,6 @@ namespace TooliRent.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("BookingTool", b =>
-                {
-                    b.HasOne("TooliRent.Core.Models.Booking", null)
-                        .WithMany()
-                        .HasForeignKey("BookingsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TooliRent.Core.Models.Tool", null)
-                        .WithMany()
-                        .HasForeignKey("ToolsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -471,11 +445,19 @@ namespace TooliRent.Infrastructure.Migrations
 
             modelBuilder.Entity("TooliRent.Core.Models.Booking", b =>
                 {
+                    b.HasOne("TooliRent.Core.Models.Tool", "Tool")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ToolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TooliRent.Core.Models.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tool");
 
                     b.Navigation("User");
                 });
@@ -494,6 +476,11 @@ namespace TooliRent.Infrastructure.Migrations
             modelBuilder.Entity("TooliRent.Core.Models.Category", b =>
                 {
                     b.Navigation("Tools");
+                });
+
+            modelBuilder.Entity("TooliRent.Core.Models.Tool", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("TooliRent.Core.Models.User", b =>

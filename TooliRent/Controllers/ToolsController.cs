@@ -1,0 +1,120 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using TooliRent.Services.DTOs.ToolDtos;
+using TooliRent.Services.Interfaces;
+
+namespace TooliRent.Controllers
+{
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ToolsController : ControllerBase
+    {
+        private readonly IToolService _toolService;
+
+        public ToolsController(IToolService toolService)
+        {
+            _toolService = toolService;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllTools()
+        {
+            var tools = await _toolService.GetAllToolsAsync();
+            return Ok(tools);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ToolDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetToolById(int id)
+        {
+            var tool = await _toolService.GetToolByIdAsync(id);
+
+            if(tool == null)
+            {
+                return NotFound("Tool not found.");
+            }
+
+            return Ok(tool);
+        }
+
+        [HttpGet("isAvailable/{available}")]
+        [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetToolsByAvailability(bool available)
+        {
+            var tools = await _toolService.GetToolsByAvailabilityAsync(available);
+
+            return Ok(tools);
+        }
+
+        [HttpGet("categoryId/{categoryId}")]
+        [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetToolsByCategoryId(int categoryId)
+        {
+            var tools = await _toolService.GetToolsByCategoryAsync(categoryId);
+            return Ok(tools);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ProducesResponseType(typeof(ToolDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateTool([FromBody]CreateToolDto createToolDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var createdTool = await _toolService.CreateToolAsync(createToolDto);
+
+            if(createdTool == null)
+            {
+                return BadRequest("That category doesn't exist");
+            }
+
+            return Ok(createdTool);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateTool(int id, [FromBody] UpdateToolDto updateToolDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updated = await _toolService.UpdateToolAsync(id, updateToolDto);
+
+            if(!updated)
+            {
+                return NotFound("Tool or category not found.");
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteTool(int id)
+        {
+            var deleted = await _toolService.DeleteToolAsync(id);
+
+            if (!deleted)
+            {
+                return NotFound("Tool not found.");
+            }
+
+            return NoContent();
+        }
+    }
+}

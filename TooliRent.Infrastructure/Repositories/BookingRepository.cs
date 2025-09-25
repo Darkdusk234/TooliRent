@@ -21,21 +21,21 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.IsPickedUp == isPickedUp).ToListAsync();
         }
 
-        public Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned)
+        public async Task<IEnumerable<Booking>> GetBookingsByReturnStatusAsync(bool isReturned)
         {
             if(isReturned)
             {
-                return Task.FromResult(_dbSet.Where(b => b.ReturnDate == DateTime.MinValue).AsEnumerable());
+                return await _dbSet.Where(b => b.ReturnDate != null).ToListAsync();
             }
             else
             {
-                return Task.FromResult(_dbSet.Where(b => b.ReturnDate != DateTime.MinValue).AsEnumerable());
+                return await _dbSet.Where(b => b.ReturnDate == null).ToListAsync();
             }
         }
 
         public async Task<IEnumerable<Booking>> GetBookingsByToolIdAsync(int toolId)
         {
-            return await _dbSet.Where(b => b.ToolId == toolId).ToListAsync();
+            return await _dbSet.Where(b => b.ToolId.Contains(toolId)).ToListAsync();
         }
 
         public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId)
@@ -43,9 +43,24 @@ namespace TooliRent.Infrastructure.Repositories
             return await _dbSet.Where(b => b.UserId == userId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Booking>> GetBookingsWithLastDateWithinDateRangeAsync(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<Booking>> GetBookingsActiveWithinDateRangeAsync(DateTime startDate, DateTime endDate)
         {
-            return await _dbSet.Where(b => (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate)).ToListAsync();
+            return await _dbSet.Where(b => ((b.StartBookedDate >= startDate && b.StartBookedDate <= endDate) 
+            || (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate))
+            && (b.ReturnDate == null && b.IsCancelled != true)).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Booking>> GetActiveToolBookingWithinDateRange(DateTime startDate, DateTime endDate, int toolId)
+        {
+            var existingBookings = await _dbSet.Where(b => ((b.StartBookedDate >= startDate && b.StartBookedDate <= endDate)
+            || (b.LastBookedDate >= startDate && b.LastBookedDate <= endDate))
+            && (b.ReturnDate == null && b.IsCancelled != true) && (b.ToolId.Contains(toolId))).ToListAsync();
+            return existingBookings;
+        }
+
+        public async Task<IEnumerable<Booking>> GetNotHandledLateReturnedBookings()
+        {
+            return await _dbSet.Where(b => b.ReturnDate != null && b.ReturnDate > b.LastBookedDate && b.LateReturnHandled == false).ToListAsync();
         }
     }
 }

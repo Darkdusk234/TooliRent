@@ -3,7 +3,7 @@ using TooliRent.Services.DTOs.ToolDtos;
 
 namespace TooliRent.Services.Validators.ToolValidators
 {
-    internal class UpdateToolDtoValidator : AbstractValidator<UpdateToolDto>
+    public class UpdateToolDtoValidator : AbstractValidator<UpdateToolDto>
     {
         public UpdateToolDtoValidator()
         {
