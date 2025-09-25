@@ -158,6 +158,7 @@ namespace TooliRent.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("pickup/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -173,6 +174,7 @@ namespace TooliRent.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("return/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -188,6 +190,7 @@ namespace TooliRent.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("lateReturns")]
         [ProducesResponseType(typeof(IEnumerable<BookingDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetLateReturnBookings()
@@ -196,6 +199,7 @@ namespace TooliRent.Controllers
             return Ok(bookings);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("lateReturnHandled/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
