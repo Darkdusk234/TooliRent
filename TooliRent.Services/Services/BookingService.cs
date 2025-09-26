@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TooliRent.Core.Interfaces;
 using TooliRent.Core.Models;
 using TooliRent.Services.DTOs.BookingDtos;
@@ -227,6 +228,29 @@ namespace TooliRent.Services.Services
         {
             var bookings = await _unitOfWork.Bookings.GetNotHandledLateReturnedBookings();
             return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+        }
+
+        public async Task<AdminStatisticDto> GetAdminStatisticsAsync(DateTime startDate, DateTime endDate)
+        {
+            var bookings = await _unitOfWork.Bookings.GetBookingsCreatedWithingDateRange(startDate, endDate);
+            var users = await _userManager.Users.ToListAsync();
+            var totalToolsBooked = 0;
+
+            foreach (var booking in bookings)
+            {
+                totalToolsBooked += booking.ToolId.Count();
+            }
+
+            var stat = new AdminStatisticDto
+            {
+                TotalBookingsDuringDateRange = bookings.Count(),
+                TotalToolsBookedDuringDateRange = totalToolsBooked,
+                TotalToolsInSystem = await _unitOfWork.Tools.GetAllAsync().ContinueWith(t => t.Result.Count()),
+                TotalUsersInSystem = users.Count(),
+                TotalToolsAvailableNow = await _unitOfWork.Tools.GetToolsByAvailabilityAsync(true).ContinueWith(t => t.Result.Count())
+            };
+
+            return stat;
         }
 
         public async Task<bool> BookingExistsAsync(int bookingId)
