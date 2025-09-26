@@ -87,6 +87,15 @@ namespace TooliRent.Controllers
             return Ok(bookings);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("statistics")]
+        [ProducesResponseType(typeof(AdminStatisticDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAdminStatistics([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var statistics = await _bookingService.GetAdminStatisticsAsync(startDate, endDate);
+            return Ok(statistics);
+        }
+
         [HttpPut("cancel/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
