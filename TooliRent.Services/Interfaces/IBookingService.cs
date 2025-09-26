@@ -20,6 +20,7 @@ namespace TooliRent.Services.Interfaces
         Task<IEnumerable<BookingDto>> GetNotHandledLateReturnedBookings();
         Task<bool> MarkLateReturnAsHandled(int id);
         Task<bool> MarkBookingAsReturnedAsync(int bookingId);
+        Task<AdminStatisticDto> GetAdminStatisticsAsync(DateTime startDate, DateTime endDate);
         Task<bool> BookingExistsAsync(int bookingId);
     }
 }

@@ -58,6 +58,11 @@ namespace TooliRent.Infrastructure.Repositories
             return existingBookings;
         }
 
+        public async Task<IEnumerable<Booking>> GetBookingsCreatedWithingDateRange(DateTime startDate, DateTime endDate)
+        {
+            return await _dbSet.Where(b => b.CreatedDate >= startDate && b.CreatedDate <= endDate).ToListAsync();
+        }
+
         public async Task<IEnumerable<Booking>> GetNotHandledLateReturnedBookings()
         {
             return await _dbSet.Where(b => b.ReturnDate != null && b.ReturnDate > b.LastBookedDate && b.LateReturnHandled == false).ToListAsync();
