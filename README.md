@@ -1,42 +1,71 @@
 # TooliRent
-About:
+## About:
+
 TooliRent is an API for use when users makes bookings of tools. It uses n-tier architecture done in four layers.
+
 First is the Core (or Domain) layer where the database models and interfaces for repositories are located. 
+
 After that is the Infrastructure layer where the repositories are implemented and where the DbContext is located, this layer act as the communication bridge between the API and the Database.
+
 Next layer is the Service (or Application) layer where alot of the main bulk of the Api is located. This is where the dtos are located and where the validators for those dtos are. The mapping profile that handles converting from dtos to models and back is also located here. This is also where the interfaces and implementation of the services are. So this layer handles the buisness logic of the API and makes sure everything goes right.
+
 The last layer is the Controller (or Presentation) layer where the controllers, that takes in the api calls to the system, is located. There is also the identitydataseeder which makes sure the database always has the identity roles and that there is always a admin account in the system. This layer takes in the calls from the user and makes sure they get the information they requested and also makes sure that only the authorised users can use the system.
 
-How to use it:
+## How to use it:
 To use the system all that is needed is to clone the repository and create an app settings file in the controller layer. In the file you are to add a default connection string that leads to the database you wanna use and then when you have that you need to and a SeedUser object and add a email and password so that the system has a admin user always. Then a JWT token settings need to be added with a key to create a secure user experience.
+
 After the app settings file is set up you run the update-database command and if the connection string was inputted correctly it should create and seed the database.
+
 After the database is created and seeded all you need to do is run the program and you will be able to use it.
 
-Api Flows:
-A common flow for a registered user could be to
+## Api Flows:
+
+### A common flow for a registered user could be to:
+
 -Call on the login end point and log in to the system to get the JWT token.
+
 -Call on the get all tools end point to see if all the tool the user needs is in the system.
+
 -Call on get bookings by id for all the tools to see if they are available during the time the user wants to book them.
+
 -Call on create booking to create a booking for the tools during the planned time.
+
 -Log out.
+
 -When they pickup the tools an admin will mark the booking as picked up.
+
 -When they return the tools an admin will mark the booking as returned.
 
-A flow for an unregistered user could be to
+
+
+### A flow for an unregistered user could be to:
+
 -Call on the register end point to create an account for them.
+
 -Call on the login end point and log in to the system to get the JWT token.
+
 -Call on the get all tools end point to see all the tools that exist in the system.
+
 -Having seen what exists log out to see what they need.
 
-A common flow for an admin could be to
+
+
+### A common flow for an admin could be to:
+
 -Call on the login end point and login to the system to get the JWT token.
+
 -Call on the create tool end point to add a new tool to the system.
+
 -Call on get all tools end point to see if it was added successfully.
+
 -Call on the update tool end point to fix wrong inputted data on the created tool.
+
 -Call on get all tools end point to see if it was updated successfully.
+
 -Log out
 
 # EndPoints
-Auth
+## Auth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -/api/Auth: Allows registration of new member. Takes in registerDto to create a user and returns either 200 status code if it succeded or 400 status code with message of what went wrong.
 
@@ -48,7 +77,7 @@ Auth
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Tools
+## Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Get End Points:
 -/api/Tools: Allows users to see all tools in system. It requires no input from user other than calling on it and returns an 200 status code with a list of all tools shown in ToolDtos. Returns a 401 status code if not logged in with a valid JWT token.
@@ -69,7 +98,7 @@ Delete End Points:
 -/api/Tools/{id}: Allows admins to delete a tool from the system. Takes in an int of the toolId and returns a 204 status code with nothing in it if tool was deleted. Returns a 404 status code if tool can't be found. Returns a 401 status code if not logged in with a valid JWT token.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Categories
+## Categories
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Get End Points:
 -/api/Categories: Allows users to see all categories in system. It requires no input from user other than calling on it and returns an 200 with a list of all categories shown in CategoryDtos. Returns a 401 status code if not logged in with a valid JWT token.
@@ -86,7 +115,7 @@ Delete End Points:
 -/api/Categories/{id}: Allows admins to delete a category from the system. Takes in an int of the categoryId and returns a 204 status code with nothing in it if category was deleted. Returns a 404 status code if category can't be found. Returns a 401 status code if not logged in with a valid JWT token.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bookings
+## Bookings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Get End Points:
 -/api/Bookings: Allows a user to get all bookings in the system. It requires no input from user other than calling on it and returns a 200 status code with a list of all bookings shown in bookingDtos. Returns a 401 status code if not logged in with a valid JWT token.
